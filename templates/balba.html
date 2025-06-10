@@ -1,778 +1,1172 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>神经风格迁移</title>
-    <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
-    <link rel="manifest" href="/static/manifest.json">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" href="/static/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/static/manifest.json" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
     <style>
-        body { background-color: #f3f4f6; transition: all 0.3s ease; }
-        header { 
-            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-            border-bottom: 4px solid #2563eb;
-            padding: 2rem;
+      body {
+        background-color: #f3f4f6;
+        transition: all 0.3s ease;
+      }
+      header {
+        background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        border-bottom: 4px solid #2563eb;
+        padding: 2rem;
+      }
+      header::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle at 30% 30%,
+          rgba(255, 255, 255, 0.3),
+          transparent 70%
+        );
+        animation: rotateGradient 15s linear infinite;
+        opacity: 0.4;
+      }
+      header h1 {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        text-shadow:
+          4px 4px 8px rgba(0, 0, 0, 0.5),
+          -2px -2px 4px rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+        transform: translateZ(10px);
+        animation: popIn 1s ease-out;
+      }
+      header p {
+        font-size: 1.25rem;
+        opacity: 0.9;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        animation: fadeInUp 1s ease-out 0.2s both;
+      }
+      #theme-toggle {
+        background-color: #2563eb;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      /* 夜间模式样式 */
+      .dark body {
+        background-color: #0f172a;
+        color: #e2e8f0;
+      }
+      .dark header {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        border-bottom: 4px solid #1e40af;
+      }
+      .dark footer {
+        background-color: #1e293b;
+      }
+      .dark #theme-toggle {
+        background-color: #475569;
+      }
+      .dark .right-panel {
+        background-color: #1e293b;
+        border: 1px solid #334155;
+      }
+      .dark .image-preview {
+        background-color: #1e293b;
+      }
+      .dark .left-panel {
+        background-color: #1e293b;
+        border: 1px solid #334155;
+      }
+      .dark .text-gray-700 {
+        color: #cbd5e1;
+      }
+      .dark .text-gray-500 {
+        color: #94a3b8;
+      }
+      .dark .text-gray-600 {
+        color: #94a3b8;
+      }
+      .dark .text-gray-400 {
+        color: #94a3b8;
+      }
+      .dark h1 {
+        color: #f1f5f9;
+      }
+      .dark h2 {
+        color: #f1f5f9;
+      }
+      .dark h3 {
+        color: #f1f5f9;
+      }
+      .dark .text-white {
+        color: #f1f5f9;
+      }
+      .dark input[type="file"] {
+        background-color: #334155;
+        border-color: #475569;
+        color: #e2e8f0;
+      }
+      .dark input[type="range"] {
+        background-color: #475569;
+      }
+      .dark .bg-gray-200 {
+        background-color: #334155;
+      }
+      .dark .bg-gray-300 {
+        background-color: #475569;
+      }
+      .dark .border-gray-300 {
+        border-color: #475569;
+      }
+      .dark .border-gray-700 {
+        border-color: #475569;
+      }
+
+      /* 拖拽上传样式 */
+      .drag-area {
+        border: 2px dashed #cbd5e1;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        background-color: #f8fafc;
+      }
+      .drag-area:hover {
+        border-color: #3b82f6;
+        background-color: #eff6ff;
+      }
+      .drag-area.dragover {
+        border-color: #3b82f6;
+        background-color: #dbeafe;
+        transform: scale(1.02);
+      }
+      .dark .drag-area {
+        background-color: #334155;
+        border-color: #475569;
+      }
+      .dark .drag-area:hover {
+        border-color: #60a5fa;
+        background-color: #1e40af;
+      }
+      .dark .drag-area.dragover {
+        border-color: #60a5fa;
+        background-color: #1e40af;
+      }
+
+      .spinner-border {
+        border-top-color: transparent;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
         }
-        header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3), transparent 70%);
-            animation: rotateGradient 15s linear infinite;
-            opacity: 0.4;
+      }
+
+      /* 历史记录折叠动画 */
+      .history-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+      .history-content.expanded {
+        max-height: 500px;
+      }
+
+      /* 按钮样式 */
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        transition: all 0.3s ease;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      }
+
+      /* 结果图片区域 */
+      .result-container {
+        min-height: 200px;
+        width: 400px; /* 设置固定宽度 */
+        height: 400px; /* 设置固定高度 */
+        margin: 0 auto; /* 水平居中 */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8fafc;
+        border-radius: 12px;
+        border: 2px solid #e5e7eb;
+        padding: 20px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+      .result-container.empty {
+        background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
+        border: 2px dashed #cbd5e1;
+        animation: pulse 2s ease-in-out infinite;
+      }
+      .result-container.empty::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 20"></path></svg>')
+          no-repeat center;
+        background-size: 80px 80px;
+        opacity: 0.2;
+      }
+      .dark .result-container {
+        background-color: #1e293b;
+        border-color: #334155;
+      }
+      .dark .result-container.empty {
+        background: linear-gradient(145deg, #2a2a2b, #1e1e1e);
+        border-color: #475569;
+      }
+      .result-container p {
+        margin-top: 10px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #6b7280;
+        text-align: center;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 1.5s ease-in-out;
+      }
+      .result-container img {
+        margin-bottom: 10px;
+      }
+      .result-container:hover {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+      }
+
+      /* 新功能块：风格预览 */
+      .style-preview-container {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        overflow: hidden;
+      }
+      .dark .style-preview-container {
+        background-color: #1e293b;
+        border-color: #334155;
+      }
+      .style-preview-container h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #1f2937;
+      }
+      .dark .style-preview-container h3 {
+        color: #f1f5f9;
+      }
+      .style-preview-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 10px;
+        max-height: 200px; /* 限制高度，只显示一行 */
+        overflow: hidden; /* 隐藏溢出部分 */
+        transition: max-height 0.5s ease;
+      }
+      .style-preview-grid.expanded {
+        max-height: 1000px; /* 展开时的高度 */
+      }
+      .style-preview-item {
+        position: relative;
+        cursor: pointer;
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+      .style-preview-item img {
+        width: 100%;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+      }
+      .style-preview-item:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+      .style-preview-item::after {
+        content: attr(data-name);
+        position: absolute;
+        bottom: 5px;
+        left: 5px;
+        background-color: rgba(0, 0, 0, 0.6);
+        color: #ffffff;
+        font-size: 0.75rem;
+        padding: 2px 6px;
+        border-radius: 4px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .style-preview-item:hover::after {
+        opacity: 1;
+      }
+
+      /* 动画效果 */
+      @keyframes popIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.8) rotate(0deg);
         }
-        header h1 {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5), -2px -2px 4px rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-            transform: translateZ(10px);
-            animation: popIn 1s ease-out;
+        100% {
+          opacity: 1;
+          transform: scale(1) rotate(0deg);
         }
-        header p {
-            font-size: 1.25rem;
-            opacity: 0.9;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            animation: fadeInUp 1s ease-out 0.2s both;
+      }
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
         }
-        #theme-toggle { 
-            background-color: #2563eb; 
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
-        
-        /* 夜间模式样式 */
-        .dark body { background-color: #0f172a; color: #e2e8f0; }
-        .dark header { 
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            border-bottom: 4px solid #1e40af;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
         }
-        .dark footer { background-color: #1e293b; }
-        .dark #theme-toggle { background-color: #475569; }
-        .dark .right-panel { background-color: #1e293b; border: 1px solid #334155; }
-        .dark .image-preview { background-color: #1e293b; }
-        .dark .left-panel { background-color: #1e293b; border: 1px solid #334155; }
-        .dark .text-gray-700 { color: #cbd5e1; }
-        .dark .text-gray-500 { color: #94a3b8; }
-        .dark .text-gray-600 { color: #94a3b8; }
-        .dark .text-gray-400 { color: #94a3b8; }
-        .dark h1 { color: #f1f5f9; }
-        .dark h2 { color: #f1f5f9; }
-        .dark h3 { color: #f1f5f9; }
-        .dark .text-white { color: #f1f5f9; }
-        .dark input[type="file"] { background-color: #334155; border-color: #475569; color: #e2e8f0; }
-        .dark input[type="range"] { background-color: #475569; }
-        .dark .bg-gray-200 { background-color: #334155; }
-        .dark .bg-gray-300 { background-color: #475569; }
-        .dark .border-gray-300 { border-color: #475569; }
-        .dark .border-gray-700 { border-color: #475569; }
-        
-        /* 拖拽上传样式 */
-        .drag-area {
-            border: 2px dashed #cbd5e1;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            background-color: #f8fafc;
+        to {
+          opacity: 1;
         }
-        .drag-area:hover {
-            border-color: #3b82f6;
-            background-color: #eff6ff;
+      }
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
         }
-        .drag-area.dragover {
-            border-color: #3b82f6;
-            background-color: #dbeafe;
-            transform: scale(1.02);
+        50% {
+          transform: scale(1.02);
         }
-        .dark .drag-area {
-            background-color: #334155;
-            border-color: #475569;
+        100% {
+          transform: scale(1);
         }
-        .dark .drag-area:hover {
-            border-color: #60a5fa;
-            background-color: #1e40af;
+      }
+      @keyframes rotateGradient {
+        from {
+          transform: rotate(0deg);
         }
-        .dark .drag-area.dragover {
-            border-color: #60a5fa;
-            background-color: #1e40af;
+        to {
+          transform: rotate(360deg);
         }
-        
-        .spinner-border {
-            border-top-color: transparent;
-            animation: spin 1s linear infinite;
+      }
+
+      /* 页面背景动画 */
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+          circle at 50% 50%,
+          rgba(59, 130, 246, 0.05) 0%,
+          transparent 70%
+        );
+        z-index: -1;
+        animation: pulseBackground 15s ease-in-out infinite alternate;
+      }
+
+      .dark body::before {
+        background: radial-gradient(
+          circle at 50% 50%,
+          rgba(30, 64, 175, 0.1) 0%,
+          transparent 70%
+        );
+      }
+
+      @keyframes pulseBackground {
+        0% {
+          transform: scale(1);
+          opacity: 0.3;
         }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        50% {
+          transform: scale(1.5);
+          opacity: 0.5;
         }
-        
-        /* 历史记录折叠动画 */
-        .history-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
+        100% {
+          transform: scale(1);
+          opacity: 0.3;
         }
-        .history-content.expanded {
-            max-height: 500px;
-        }
-        
-        /* 按钮样式 */
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            transition: all 0.3s ease;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-        }
-        
-        /* 结果图片区域 */
-        .result-container {
-            min-height: 200px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background-color: #f8fafc;
-            border-radius: 12px;
-            border: 2px solid #e5e7eb;
-            padding: 20px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        .result-container.empty {
-            background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
-            border: 2px dashed #cbd5e1;
-            animation: pulse 2s ease-in-out infinite;
-        }
-        .result-container.empty::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 20"></path></svg>') no-repeat center;
-            background-size: 80px 80px;
-            opacity: 0.2;
-        }
-        .dark .result-container {
-            background-color: #1e293b;
-            border-color: #334155;
-        }
-        .dark .result-container.empty {
-            background: linear-gradient(145deg, #2a2a2b, #1e1e1e);
-            border-color: #475569;
-        }
-        .result-container p {
-            margin-top: 10px;
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: #6b7280;
-            text-align: center;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-            animation: fadeIn 1.5s ease-in-out;
-        }
-        .result-container img {
-            margin-bottom: 10px;
-        }
-        .result-container:hover {
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-        }
-        
-        /* 新功能块：风格预览 */
-        .style-preview-container {
-            margin-top: 20px;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 12px;
-            border: 1px solid #e5e7eb;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        .dark .style-preview-container {
-            background-color: #1e293b;
-            border-color: #334155;
-        }
-        .style-preview-container h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #1f2937;
-        }
-        .dark .style-preview-container h3 {
-            color: #f1f5f9;
-        }
-        .style-preview-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 10px;
-        }
-        .style-preview-item {
-            position: relative;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .style-preview-item img {
-            width: 100%;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 1px solid #d1d5db;
-        }
-        .style-preview-item:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-        .style-preview-item::after {
-            content: attr(data-name);
-            position: absolute;
-            bottom: 5px;
-            left: 5px;
-            background-color: rgba(0, 0, 0, 0.6);
-            color: #ffffff;
-            font-size: 0.75rem;
-            padding: 2px 6px;
-            border-radius: 4px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .style-preview-item:hover::after {
-            opacity: 1;
-        }
-        
-        /* 动画效果 */
-        @keyframes popIn {
-            0% { opacity: 0; transform: scale(0.8) rotate(0deg); }
-            100% { opacity: 1; transform: scale(1) rotate(0deg); }
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
-        @keyframes rotateGradient {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
+      }
     </style>
-</head>
-<body class="bg-gray-100 transition-colors duration-500">
+  </head>
+  <body class="bg-gray-100 transition-colors duration-500">
     <header class="bg-blue-500 text-white text-center py-6 shadow-md relative">
-        <h1 class="text-4xl font-bold">神经风格迁移</h1>
-        <p class="mt-2 text-lg">将您的图片转化为艺术作品</p>
-        <div class="absolute top-0 right-0 p-4">
-            <button id="theme-toggle" class="relative inline-flex items-center px-3 py-2 rounded-full transition-all duration-300 focus:outline-none bg-blue-600 text-white">
-                <span class="transform transition-transform duration-300" id="theme-icon">🌞</span>
-            </button>
-        </div>
+      <h1 class="text-4xl font-bold">神经风格迁移</h1>
+      <p class="mt-2 text-lg">将您的图片转化为艺术作品</p>
+      <div class="absolute top-0 right-0 p-4">
+        <button
+          id="theme-toggle"
+          class="relative inline-flex items-center px-3 py-2 rounded-full transition-all duration-300 focus:outline-none bg-blue-600 text-white"
+        >
+          <span
+            class="transform transition-transform duration-300"
+            id="theme-icon"
+            >🌞</span
+          >
+        </button>
+      </div>
     </header>
     <div id="app" class="flex flex-col lg:flex-row max-w-6xl mx-auto p-6">
-        <div class="left-panel flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 m-2 lg:w-1/3">
-            <h2 class="text-xl font-semibold mb-4">上传原图片</h2>
-            <div class="image-preview mb-4">
-                <h3 class="text-sm font-light mb-2">内容图片：</h3>
-                <div class="drag-area mb-4" @click="triggerContentUpload" @dragover.prevent @dragenter.prevent @drop.prevent="handleContentDrop" :class="{dragover: contentDragover}" @dragenter="contentDragover = true" @dragleave="contentDragover = false">
-                    <div v-if="uploadedContentImage" class="flex justify-center">
-                        <img :src="uploadedContentImage" alt="上传的内容图片" class="rounded-lg max-h-32 object-contain shadow-md">
-                    </div>
-                    <div v-else class="text-center">
-                        <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
-                        <p class="text-gray-500 dark:text-gray-400">点击或拖拽上传内容图片</p>
-                        <p class="text-xs text-gray-400 mt-1">支持 PNG, JPG, JPEG, GIF</p>
-                    </div>
-                </div>
-                <input type="file" id="contentFile" @change="handleContentFileUpload" accept="image/*" class="hidden">
+      <div
+        class="left-panel flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 m-2 lg:w-1/3"
+      >
+        <h2 class="text-xl font-semibold mb-4">上传原图片</h2>
+        <div class="image-preview mb-4">
+          <h3 class="text-sm font-light mb-2">内容图片：</h3>
+          <div
+            class="drag-area mb-4"
+            @click="triggerContentUpload"
+            @dragover.prevent
+            @dragenter.prevent
+            @drop.prevent="handleContentDrop"
+            :class="{dragover: contentDragover}"
+            @dragenter="contentDragover = true"
+            @dragleave="contentDragover = false"
+          >
+            <div v-if="uploadedContentImage" class="flex justify-center">
+              <img
+                :src="uploadedContentImage"
+                alt="上传的内容图片"
+                class="rounded-lg max-h-32 object-contain shadow-md"
+              />
             </div>
-            <div class="image-preview mb-4">
-                <h3 class="text-sm font-light mb-2">风格图片：</h3>
-                <div class="drag-area mb-4" @click="triggerStyleUpload" @dragover.prevent @dragenter.prevent @drop.prevent="handleStyleDrop" :class="{dragover: styleDragover}" @dragenter="styleDragover = true" @dragleave="styleDragover = false">
-                    <div v-if="uploadedStyleImage" class="flex justify-center">
-                        <img :src="uploadedStyleImage" alt="上传的风格图片" class="rounded-lg max-h-32 object-cover shadow-md">
-                    </div>
-                    <div v-else class="text-center">
-                        <i class="fas fa-palette text-3xl text-gray-400 mb-2"></i>
-                        <p class="text-gray-500 dark:text-gray-400">点击或拖拽上传风格图片</p>
-                        <p class="text-xs text-gray-400 mt-1">支持 PNG, JPG, JPEG, GIF</p>
-                    </div>
-                </div>
-                <input type="file" id="styleFile" @change="handleStyleFileSelect" accept="image/*" class="hidden">
+            <div v-else class="text-center">
+              <i
+                class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"
+              ></i>
+              <p class="text-gray-500 dark:text-gray-400">
+                点击或拖拽上传内容图片
+              </p>
+              <p class="text-xs text-gray-400 mt-1">支持 PNG, JPG, JPEG, GIF</p>
             </div>
-            <form @submit.prevent="runStyleTransfer" class="mb-4 flex-grow">
-                <div class="mb-4 p-3 bg-blue-50 dark:bg-blue-900 rounded-lg border border-blue-200 dark:border-blue-700">
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm font-medium text-blue-800 dark:text-blue-200">计算设备:</span>
-                        <div class="flex items-center" :title="deviceInfo.description">
-                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium" :class="deviceInfo.device_type === 'GPU' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'">
-                                <i class="fas" :class="deviceInfo.device_type === 'GPU' ? 'fa-microchip' : 'fa-desktop'" class="mr-1"></i>
-                                [[ deviceInfo.device_type ]]
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <label for="style_weight" class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">样式权重:</label>
-                <input type="range" id="style_weight" v-model="styleWeight" min="5000" max="10000" step="100" class="w-full bg-gray-300 dark:bg-gray-700">
-                <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
-                    <span>保守 (5000)</span>
-                    <span>平衡 (7500)</span>
-                    <span>激进 (10000)</span>
-                </div>
-                <span class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-4">[[ styleWeight ]] - [[ getStyleWeightDescription(styleWeight) ]]</span>
-                <label for="num_steps" class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">迭代步数:</label>
-                <input type="range" id="num_steps" v-model="numSteps" min="100" max="1000" class="w-full bg-gray-300 dark:bg-gray-700">
-                <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
-                    <span>快速 (100)</span>
-                    <span>标准 (300)</span>
-                    <span>精细 (600)</span>
-                    <span>极致 (1000)</span>
-                </div>
-                <span class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">[[ numSteps ]] - [[ getStepsItems(numSteps) ]]</span>
-                <button type="submit" class="mt-4 w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700">开始风格迁移</button>
-            </form>
-            <div class="border-t pt-6">
-                <div class="flex items-center justify-between mb-4 cursor-pointer" @click="historyExpanded = !historyExpanded">
-                    <h2 class="text-xl font-semibold">历史记录</h2>
-                    <i class="fas" :class="historyExpanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-                </div>
-                <div class="history-content" :class="{expanded: historyExpanded}">
-                    <div class="space-y-4">
-                        <div v-for="(items, key) in history" :key="key" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg shadow-sm">
-                            <div class="flex items-center mb-2 cursor-pointer" @click="toggleItems(key)">
-                                <img :src="'/uploads/' + key + '.jpg'" :onerror="handleImageError" alt="内容图" class="w-16 h-16 rounded-md mr-2 object-cover">
-                                <div class="flex-1">
-                                    <span class="font-bold block">内容图: [[ key ]]</span>
-                                    <span class="text-sm text-gray-500 dark:text-gray-400">[[ items.length ]] 个风格化结果</span>
-                                </div>
-                                <i class="fas mr-2" :class="expandedKeys.includes(key) ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-                                <button @click.stop="deleteHistory(key)" class="bg-red-500 text-white rounded-md px-3 py-1 hover:bg-red-600 transition-colors">删除</button>
-                            </div>
-                            <div v-if="expandedKeys.includes(key)" class="pl-6 space-y-2">
-                                <div v-for="(item, index) in items" :key="index" class="flex items-center p-2 bg-gray-100 dark:bg-gray-600 rounded">
-                                    <img :src="item.output_img" alt="风格化结果" class="w-12 h-12 rounded-md mr-3 object-cover">
-                                    <div class="flex-1">
-                                        <div class="text-sm font-medium">风格权重: [[ item.style_weight ]]</div>
-                                        <div class="text-xs text-gray-500 dark:text-gray-400">步数: [[ item.steps ]]</div>
-                                    </div>
-                                    <button @click="downloadStyledImage(item.output_img)" class="bg-green-500 text-white rounded-md px-3 py-1 hover:bg-green-600 transition-colors">
-                                        <i class="fas fa-download"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-if="Object.keys(history).length === 0" class="text-center text-gray-500 dark:text-gray-400 py-8">
-                            <i class="fas fa-history text-3xl mb-2"></i>
-                            <p>暂无历史记录</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          </div>
+          <input
+            type="file"
+            id="contentFile"
+            @change="handleContentFileUpload"
+            accept="image/*"
+            class="hidden"
+          />
         </div>
-        <div class="right-panel bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 m-2 flex flex-col w-full lg:w-2/3">
-            <h2 class="text-xl font-semibold mb-4">处理状态</h2>
-            <div v-if="loading" class="flex items-center justify-center py-6">
-                <div class="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-current text-blue-600 border-t-transparent mr-2"></div>
-                <span class="text-gray-600 dark:text-gray-400">正在处理...</span>
+        <div class="image-preview mb-4">
+          <h3 class="text-sm font-light mb-2">风格图片：</h3>
+          <div
+            class="drag-area mb-4"
+            @click="triggerStyleUpload"
+            @dragover.prevent
+            @dragenter.prevent
+            @drop.prevent="handleStyleDrop"
+            :class="{dragover: styleDragover}"
+            @dragenter="styleDragover = true"
+            @dragleave="styleDragover = false"
+          >
+            <div v-if="uploadedStyleImage" class="flex justify-center">
+              <img
+                :src="uploadedStyleImage"
+                alt="上传的风格图片"
+                class="rounded-lg max-h-32 object-cover shadow-md"
+              />
             </div>
-            <p v-if="!loading" class="text-lg font-medium">当前进度: [[ progressText ]]</p>
-            <div v-if="progress" class="mt-4">
-                <div class="bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                    <div :style="{ width: progress + '%' }" class="bg-blue-600 h-2 rounded-full"></div>
-                </div>
-                <p class="text-sm text-center mt-1">[[progress.toFixed(1)]]%</p>
+            <div v-else class="text-center">
+              <i class="fas fa-palette text-3xl text-gray-400 mb-2"></i>
+              <p class="text-gray-500 dark:text-gray-400">
+                点击或拖拽上传风格图片
+              </p>
+              <p class="text-xs text-gray-400 mt-1">支持 PNG, JPG, JPEG, GIF</p>
             </div>
-            <hr class="h-px my-4 bg-gray-300 dark:bg-gray-600 border-0">
-            <h2 class="text-xl font-semibold mb-4">结果图像</h2>
-            <div class="result-container" :class="{ empty: !resultImagePath && !loading }">
-                <img v-if="resultImagePath" :src="resultImagePath" alt="生成的风格图片" class="rounded-lg max-h-[500px] object-contain shadow-md border border-gray-300 dark:border-gray-700">
-                <p v-else-if="!loading" class="text-gray-500 dark:text-gray-400"></p>
-                <button v-if="resultImagePath" @click="downloadResultImage(resultImagePath)" class="mt-4 bg-green-500 text-white rounded-md px-4 py-2 hover:bg-green-600 transition-colors">下载</button>
-            </div>
-            <div class="style-preview-container mt-8 p-6 rounded-lg shadow-lg border border-blue-200 dark:border-blue-800 w-full">
-                <h3 class="text-2xl font-bold mb-4 text-blue-700 dark:text-blue-300">推荐风格</h3>
-                <p class="text-gray-600 dark:text-gray-400 mb-4">点击下方风格图片可直接应用该风格</p>
-                <div class="style-preview-grid grid-cols-1 md:grid-cols-5 gap-4">
-                    <div v-for="style in presetStyles" :key="style.id" class="style-preview-item" @click="selectPresetStyle(style.url)" :data-name="style.name">
-                        <img :src="style.url" :alt="style.name" class="h-40 w-full object-cover rounded-lg shadow-md transition-all duration-300 hover:shadow-xl" />
-                        <div class="mt-2 text-center font-medium text-gray-700 dark:text-gray-300">[[ style.name ]]</div>
-                    </div>
-                    <div class="style-preview-item add-style-btn" @click="triggerCustomStyleUpload">
-                        <div class="h-40 w-full flex items-center justify-center rounded-lg shadow-md border-2 border-dashed border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/30 transition-all duration-300 hover:shadow-xl hover:border-blue-500 dark:hover:border-blue-500">
-                            <div class="text-center">
-                                <i class="fas fa-plus text-4xl text-blue-500 mb-2"></i>
-                                <p class="font-medium text-blue-600 dark:text-blue-400">添加风格</p>
-                            </div>
-                        </div>
-                        <div class="mt-2 text-center font-medium text-gray-700 dark:text-gray-300">自定义风格</div>
-                    </div>
-                </div>
-            </div>
+          </div>
+          <input
+            type="file"
+            id="styleFile"
+            @change="handleStyleFileSelect"
+            accept="image/*"
+            class="hidden"
+          />
         </div>
+        <form @submit.prevent="runStyleTransfer" class="mb-4 flex-grow">
+          <div
+            class="mb-4 p-3 bg-blue-50 dark:bg-blue-900 rounded-lg border border-blue-200 dark:border-blue-700"
+          >
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-medium text-blue-800 dark:text-blue-200"
+                >计算设备:</span
+              >
+              <div class="flex items-center" :title="deviceInfo.description">
+                <span
+                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
+                  :class="deviceInfo.device_type === 'GPU' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'"
+                >
+                  <i
+                    class="fas"
+                    :class="deviceInfo.device_type === 'GPU' ? 'fa-microchip' : 'fa-desktop'"
+                    class="mr-1"
+                  ></i>
+                  [[ deviceInfo.device_type ]]
+                </span>
+              </div>
+            </div>
+          </div>
+          <label
+            for="style_weight"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2"
+            >样式权重:</label
+          >
+          <input
+            type="range"
+            id="style_weight"
+            v-model="styleWeight"
+            min="5000"
+            max="10000"
+            step="100"
+            class="w-full bg-gray-300 dark:bg-gray-700"
+          />
+          <div
+            class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1"
+          >
+            <span>保守 (5000)</span>
+            <span>平衡 (7500)</span>
+            <span>激进 (10000)</span>
+          </div>
+          <span
+            class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-4"
+            >[[ styleWeight ]] - [[ getStyleWeightDescription(styleWeight)
+            ]]</span
+          >
+          <label
+            for="num_steps"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2"
+            >迭代步数:</label
+          >
+          <input
+            type="range"
+            id="num_steps"
+            v-model="numSteps"
+            min="100"
+            max="1000"
+            class="w-full bg-gray-300 dark:bg-gray-700"
+          />
+          <div
+            class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1"
+          >
+            <span>快速 (100)</span>
+            <span>标准 (300)</span>
+            <span>精细 (600)</span>
+            <span>极致 (1000)</span>
+          </div>
+          <span
+            class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2"
+            >[[ numSteps ]] - [[ getStepsItems(numSteps) ]]</span
+          >
+          <button
+            type="submit"
+            class="mt-4 w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700"
+          >
+            开始风格迁移
+          </button>
+        </form>
+        <div class="border-t pt-6">
+          <div
+            class="flex items-center justify-between mb-4 cursor-pointer"
+            @click="historyExpanded = !historyExpanded"
+          >
+            <h2 class="text-xl font-semibold">历史记录</h2>
+            <i
+              class="fas"
+              :class="historyExpanded ? 'fa-chevron-up' : 'fa-chevron-down'"
+            ></i>
+          </div>
+          <div class="history-content" :class="{expanded: historyExpanded}">
+            <div class="space-y-4">
+              <div
+                v-for="(items, key) in history"
+                :key="key"
+                class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg shadow-sm"
+              >
+                <div
+                  class="flex items-center mb-2 cursor-pointer"
+                  @click="toggleItems(key)"
+                >
+                  <img
+                    :src="'/uploads/' + key + '.jpg'"
+                    :onerror="handleImageError"
+                    alt="内容图"
+                    class="w-16 h-16 rounded-md mr-2 object-cover"
+                  />
+                  <div class="flex-1">
+                    <span class="font-bold block">内容图: [[ key ]]</span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400"
+                      >[[ items.length ]] 个风格化结果</span
+                    >
+                  </div>
+                  <i
+                    class="fas mr-2"
+                    :class="expandedKeys.includes(key) ? 'fa-chevron-up' : 'fa-chevron-down'"
+                  ></i>
+                  <button
+                    @click.stop="deleteHistory(key)"
+                    class="bg-red-500 text-white rounded-md px-3 py-1 hover:bg-red-600 transition-colors"
+                  >
+                    删除
+                  </button>
+                </div>
+                <div v-if="expandedKeys.includes(key)" class="pl-6 space-y-2">
+                  <div
+                    v-for="(item, index) in items"
+                    :key="index"
+                    class="flex items-center p-2 bg-gray-100 dark:bg-gray-600 rounded"
+                  >
+                    <img
+                      :src="item.output_img"
+                      alt="风格化结果"
+                      class="w-12 h-12 rounded-md mr-3 object-cover"
+                    />
+                    <div class="flex-1">
+                      <div class="text-sm font-medium">
+                        风格权重: [[ item.style_weight ]]
+                      </div>
+                      <div class="text-xs text-gray-500 dark:text-gray-400">
+                        步数: [[ item.steps ]]
+                      </div>
+                    </div>
+                    <button
+                      @click="downloadStyledImage(item.output_img)"
+                      class="bg-green-500 text-white rounded-md px-3 py-1 hover:bg-green-600 transition-colors"
+                    >
+                      <i class="fas fa-download"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div
+                v-if="Object.keys(history).length === 0"
+                class="text-center text-gray-500 dark:text-gray-400 py-8"
+              >
+                <i class="fas fa-history text-3xl mb-2"></i>
+                <p>暂无历史记录</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="right-panel bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 m-2 flex flex-col w-full lg:w-2/3"
+      >
+        <h2 class="text-xl font-semibold mb-4">处理状态</h2>
+        <div v-if="loading" class="flex items-center justify-center py-6">
+          <div
+            class="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-current text-blue-600 border-t-transparent mr-2"
+          ></div>
+          <span class="text-gray-600 dark:text-gray-400">正在处理...</span>
+        </div>
+        <p v-if="!loading" class="text-lg font-medium">
+          当前进度: [[ progressText ]]
+        </p>
+        <div v-if="progress" class="mt-4">
+          <div class="bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+            <div
+              :style="{ width: progress + '%' }"
+              class="bg-blue-600 h-2 rounded-full"
+            ></div>
+          </div>
+          <p class="text-sm text-center mt-1">[[progress.toFixed(1)]]%</p>
+        </div>
+        <hr class="h-px my-4 bg-gray-300 dark:bg-gray-600 border-0" />
+        <h2 class="text-xl font-semibold mb-4">结果图像</h2>
+        <div
+          class="result-container"
+          :class="{ empty: !resultImagePath && !loading }"
+        >
+          <img
+            v-if="resultImagePath"
+            :src="resultImagePath"
+            alt="生成的风格图片"
+            class="rounded-lg max-h-[500px] object-contain shadow-md border border-gray-300 dark:border-gray-700"
+          />
+          <p v-else-if="!loading" class="text-gray-500 dark:text-gray-400"></p>
+          <button
+            v-if="resultImagePath"
+            @click="downloadResultImage(resultImagePath)"
+            class="mt-4 bg-green-500 text-white rounded-md px-4 py-2 hover:bg-green-600 transition-colors"
+          >
+            下载
+          </button>
+        </div>
+        <div
+          class="style-preview-container mt-8 p-6 rounded-lg shadow-lg border border-blue-200 dark:border-blue-800 w-full"
+        >
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-2xl font-bold text-blue-700 dark:text-blue-300">
+              推荐风格
+            </h3>
+            <button 
+              @click="toggleStylesExpanded"
+              class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
+            >
+              <i class="fas" :class="stylesExpanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+              [[ stylesExpanded ? '收起' : '展开' ]]
+            </button>
+          </div>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">
+            点击下方风格图片可直接应用该风格
+          </p>
+          <div class="style-preview-grid grid-cols-1 md:grid-cols-5 gap-4" :class="{expanded: stylesExpanded}">
+            <div
+              v-for="style in presetStyles"
+              :key="style.id"
+              class="style-preview-item"
+              @click="selectPresetStyle(style.url)"
+              :data-name="style.name"
+            >
+              <img
+                :src="style.url"
+                :alt="style.name"
+                class="h-40 w-full object-cover rounded-lg shadow-md transition-all duration-300 hover:shadow-xl"
+              />
+              <div
+                class="mt-2 text-center font-medium text-gray-700 dark:text-gray-300"
+              >
+                [[ style.name ]]
+              </div>
+            </div>
+            <div
+              class="style-preview-item add-style-btn"
+              @click="triggerCustomStyleUpload"
+            >
+              <div
+                class="h-40 w-full flex items-center justify-center rounded-lg shadow-md border-2 border-dashed border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/30 transition-all duration-300 hover:shadow-xl hover:border-blue-500 dark:hover:border-blue-500"
+              >
+                <div class="text-center">
+                  <i class="fas fa-plus text-4xl text-blue-500 mb-2"></i>
+                  <p class="font-medium text-blue-600 dark:text-blue-400">
+                    添加风格
+                  </p>
+                </div>
+              </div>
+              <div
+                class="mt-2 text-center font-medium text-gray-700 dark:text-gray-300"
+              >
+                自定义风格
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <footer class="bg-gray-200 dark:bg-gray-800 text-center py-4 mt-6">
-        <h2 class="text-xl font-bold mb-4">学习资源</h2>
-        <ul class="list-disc list-inside text-gray-700 dark:text-gray-400 mx-auto max-w-screen-sm mb-4">
-            <li><a href="https://www.tensorflow.org/tutorials/generative/style_transfer" class="text-blue-500 hover:underline">TensorFlow 风格迁移教程</a></li>
-            <li><a href="https://pytorch.org/tutorials/advanced/neural_style_tutorial.html" class="text-blue-500 hover:underline">PyTorch 风格迁移教程</a></li>
-        </ul>
-        <p>© 2025 Authored by Firmament.</p>
+      <h2 class="text-xl font-bold mb-4">学习资源</h2>
+      <ul
+        class="list-disc list-inside text-gray-700 dark:text-gray-400 mx-auto max-w-screen-sm mb-4"
+      >
+        <li>
+          <a
+            href="https://www.tensorflow.org/tutorials/generative/style_transfer"
+            class="text-blue-500 hover:underline"
+            >TensorFlow 风格迁移教程</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://pytorch.org/tutorials/advanced/neural_style_tutorial.html"
+            class="text-blue-500 hover:underline"
+            >PyTorch 风格迁移教程</a
+          >
+        </li>
+      </ul>
+      <p>© 2025 Authored by Firmament.</p>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script>
-        const themeToggleButton = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
+      const themeToggleButton = document.getElementById("theme-toggle");
+      const themeIcon = document.getElementById("theme-icon");
 
-        themeToggleButton.addEventListener('click', () => {
-            document.body.classList.toggle('dark');
-            if (document.body.classList.contains('dark')) {
-                themeIcon.textContent = '🌚';
-            } else {
-                themeIcon.textContent = '🌞';
-            }
-        });
-
-        new Vue({
-            el: '#app',
-            delimiters: ['[[', ']]'],
-            data: {
-                uploadedContentImage: null,
-                uploadedStyleImage: null,
-                styleWeight: 7000,
-                numSteps: 300,
-                loading: false,
-                progress: 0,
-                progressText: '等待开始',
-                resultImagePath: null,
-                history: {},
-                expandedKeys: [],
-                historyExpanded: false,
-                contentDragover: false,
-                styleDragover: false,
-                deviceInfo: {
-                    device_type: 'CPU',
-                    description: '正在获取设备信息...'
-                },
-                presetStyles: [
-                    { id: 1, name: '星空', url: '/styles/style1.jpg' },
-                    { id: 2, name: '水彩', url: '/styles/style2.jpg' },
-                    { id: 3, name: '油画', url: '/styles/style3.jpg' },
-                    { id: 4, name: '波普', url: '/styles/style4.jpg' },
-                    { id: 5, name: '抽象', url: '/styles/style5.jpg' }
-                ],
-                customStyleCounter: 0
-            },
-            methods: {
-                handleContentFileUpload(event) {
-                    const file = event.target.files[0];
-                    this.processContentFile(file);
-                },
-                handleStyleFileSelect(event) {
-                    const file = event.target.files[0];
-                    this.processStyleFile(file);
-                    
-                    // 检查是否是从添加风格按钮触发的上传
-                    if (event.target.hasAttribute('data-add-custom')) {
-                        this.addCustomStyle(file);
-                    }
-                },
-                handleImageError(event) {
-                    // 尝试加载PNG格式的图片
-                    const imgElement = event.target;
-                    const currentSrc = imgElement.src;
-                    if (currentSrc.endsWith('.jpg')) {
-                        imgElement.src = currentSrc.replace('.jpg', '.png');
-                    }
-                },
-                triggerContentUpload() {
-                    document.getElementById('contentFile').click();
-                },
-                triggerStyleUpload() {
-                    document.getElementById('styleFile').click();
-                },
-                triggerCustomStyleUpload() {
-                    // 添加data-add-custom属性标记为自定义风格上传
-                    const input = document.getElementById('styleFile');
-                    input.setAttribute('data-add-custom', 'true');
-                    input.click();
-                    // 上传完成后移除标记
-                    input.addEventListener('change', function() {
-                        this.removeAttribute('data-add-custom');
-                    }, { once: true });
-                },
-                handleContentDrop(event) {
-                    this.contentDragover = false;
-                    const files = event.dataTransfer.files;
-                    if (files.length > 0) {
-                        this.processContentFile(files[0]);
-                    }
-                },
-                handleStyleDrop(event) {
-                    this.styleDragover = false;
-                    const files = event.dataTransfer.files;
-                    if (files.length > 0) {
-                        this.processStyleFile(files[0]);
-                    }
-                },
-                processContentFile(file) {
-                    if (file && this.isValidImageFile(file)) {
-                        this.uploadedContentImage = URL.createObjectURL(file);
-                        const input = document.getElementById('contentFile');
-                        const dt = new DataTransfer();
-                        dt.items.add(file);
-                        input.files = dt.files;
-                    } else {
-                        alert('请选择有效的图片文件 (PNG, JPG, JPEG, GIF)');
-                    }
-                },
-                processStyleFile(file) {
-                    if (file && this.isValidImageFile(file)) {
-                        this.uploadedStyleImage = URL.createObjectURL(file);
-                        const input = document.getElementById('styleFile');
-                        const dt = new DataTransfer();
-                        dt.items.add(file);
-                        input.files = dt.files;
-                    } else {
-                        alert('请选择有效的图片文件 (PNG, JPG, JPEG, GIF)');
-                    }
-                },
-                // 添加自定义风格到推荐风格列表
-                addCustomStyle(file) {
-                    if (file && this.isValidImageFile(file)) {
-                        // 创建一个临时URL用于显示
-                        const imageUrl = URL.createObjectURL(file);
-                        this.customStyleCounter++;
-                        
-                        // 添加到推荐风格列表
-                        this.presetStyles.push({
-                            id: 100 + this.customStyleCounter, // 使用较大的ID避免与预设风格冲突
-                            name: `自定义风格 ${this.customStyleCounter}`,
-                            url: imageUrl,
-                            isCustom: true // 标记为自定义风格
-                        });
-                        
-                        // 上传到服务器
-                        const formData = new FormData();
-                        formData.append('style_image', file);
-                        
-                        fetch('/api/upload-style', {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log('风格图片上传成功:', data);
-                            // 可以在这里更新URL为服务器返回的路径
-                        })
-                        .catch(error => {
-                            console.error('风格图片上传失败:', error);
-                            alert('风格图片上传失败，但您仍可以在本次会话中使用它');
-                        });
-                    }
-                },
-                async selectPresetStyle(url) {
-                    try {
-                        const response = await fetch(url);
-                        const blob = await response.blob();
-                        const file = new File([blob], 'preset-style.jpg', { type: 'image/jpeg' });
-                        this.processStyleFile(file);
-                    } catch (error) {
-                        console.error('加载预设风格失败:', error);
-                        alert('无法加载预设风格图片');
-                    }
-                },
-                isValidImageFile(file) {
-                    const validTypes = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'];
-                    return validTypes.includes(file.type);
-                },
-                async fetchDeviceInfo() {
-                    try {
-                        const response = await fetch('/api/device-info');
-                        if (response.ok) {
-                            this.deviceInfo = await response.json();
-                        }
-                    } catch (error) {
-                        console.error('获取设备信息失败:', error);
-                    }
-                },
-                getStyleWeightDescription(weight) {
-                    if (weight <= 6000) return '轻质风格，保留更多原图细节';
-                    if (weight <= 7000) return '适中风格，平衡细节与效果';
-                    if (weight <= 8000) return '推荐风格，艺术感强';
-                    if (weight <= 9000) return '强烈风格，效果突出';
-                    return '极端风格，最大化艺术效果';
-                },
-                getStepsItems(steps) {
-                    if (steps <= 200) return '快速预览，适合测试';
-                    if (steps <= 400) return '标准处理，效果适中';
-                    if (steps <= 600) return '高质量，细节丰富';
-                    if (steps <= 800) return '精细处理，接近专业';
-                    return '极致处理，效果最佳';
-                },
-                runStyleTransfer() {
-                    const contentFile = document.getElementById('contentFile').files[0];
-                    const styleFile = document.getElementById('styleFile').files[0];
-
-                    if (!contentFile || !styleFile) {
-                        alert('请上传内容图像和风格图像');
-                        return;
-                    }
-
-                    this.loading = true;
-                    this.progress = 0;
-                    this.progressText = '0%';
-                    this.resultImagePath = '';
-
-                    const formData = new FormData();
-                    formData.append('content_img', contentFile);
-                    formData.append('style_img', styleFile);
-                    formData.append('style_weight', this.styleWeight);
-                    formData.append('content_weight', 1);
-                    formData.append('num_steps', this.numSteps);
-
-                    fetch('/style-transfer', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => {
-                        if (response.status === 200) {
-                            response.json().then(data => {
-                                const taskId = data.task_id;
-                                console.log('任务ID:', taskId);
-
-                                const eventSource = new EventSource(`/stream/${taskId}`);
-
-                                eventSource.onmessage = (event) => {
-                                    try {
-                                        const jsonData = event.data.replace(/^data: /, '');
-                                        const taskData = JSON.parse(jsonData);
-
-                                        if (taskData.progress) {
-                                            const step = taskData.progress.step;
-                                            this.progress = Math.min((step / this.numSteps) * 100, 100);
-                                            this.progressText = `${Math.round(this.progress)}%`;
-                                        }
-
-                                        if (taskData.status === 'completed' && taskData.output_path) {
-                                            this.resultImagePath = taskData.output_path;
-                                            this.loading = false;
-                                            eventSource.close();
-                                            this.fetchHistory();
-                                        }
-
-                                        if (taskData.status === 'failed') {
-                                            alert('风格迁移失败，请稍后重试');
-                                            this.loading = false;
-                                            eventSource.close();
-                                        }
-                                    } catch (e) {
-                                        console.error('Error parsing SSE data:', e);
-                                    }
-                                };
-
-                                eventSource.onerror = (error) => {
-                                    console.error('EventSource 连接出现错误:', error);
-                                    alert('风格迁移进度获取出现问题，请稍后重试');
-                                    this.loading = false;
-                                    eventSource.close();
-                                };
-                            });
-                        } else {
-                            console.error('风格迁移请求失败，状态码:', response.status);
-                            alert('风格迁移请求失败');
-                            this.loading = false;
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('风格迁移请求失败:', error);
-                        alert('风格迁移请求失败');
-                        this.loading = false;
-                    });
-                },
-                fetchHistory() {
-                    fetch('/api/history')
-                        .then(response => response.json())
-                        .then(data => {
-                            this.history = data;
-                        })
-                        .catch(error => alert('获取历史记录失败: ' + error));
-                },
-                toggleItems(key) {
-                    if (this.expandedKeys.includes(key)) {
-                        this.expandedKeys = this.expandedKeys.filter(k => k !== key);
-                    } else {
-                        this.expandedKeys.push(key);
-                    }
-                },
-                deleteHistory(key) {
-                    if (!confirm('确定要删除这张历史记录图片吗？')) {
-                        return;
-                    }
-
-                    fetch(`/api/delete-history?key=${encodeURIComponent(key)}`, {
-                        method: 'DELETE'
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.message === 'Image deleted successfully.' || data.message === 'Image deleted, but history file does not exist.') {
-                            alert('删除成功');
-                            this.fetchHistory();
-                        } else {
-                            alert(data.message || '删除失败');
-                        }
-                    })
-                    .catch(error => alert('删除失败: ' + error));
-                },
-                downloadStyledImage(imagePath) {
-                    const link = document.createElement('a');
-                    link.href = imagePath;
-                    link.download = 'styled-image.png';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                },
-                downloadResultImage(imagePath) {
-                    const link = document.createElement('a');
-                    link.href = imagePath;
-                    link.download = 'result-image.png';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                },
-            },
-            mounted() {
-                this.fetchHistory();
-                this.fetchDeviceInfo();
-            },
-        });
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/static/sw.js')
-                    .then(registration => {
-                        console.log('Service Worker registered: ', registration);
-                    })
-                    .catch(error => {
-                        console.error('Service Worker registration failed: ', error);
-                    });
-            });
+      themeToggleButton.addEventListener("click", () => {
+        document.body.classList.toggle("dark");
+        if (document.body.classList.contains("dark")) {
+          themeIcon.textContent = "🌚";
+        } else {
+          themeIcon.textContent = "🌞";
         }
+      });
+
+      new Vue({
+        el: "#app",
+        delimiters: ["[[", "]]"],
+        data: {
+          uploadedContentImage: null,
+          uploadedStyleImage: null,
+          styleWeight: 7000,
+          numSteps: 300,
+          loading: false,
+          progress: 0,
+          progressText: "等待开始",
+          resultImagePath: null,
+          history: {},
+          expandedKeys: [],
+          historyExpanded: false,
+          contentDragover: false,
+          styleDragover: false,
+          deviceInfo: {
+            device_type: "CPU",
+            description: "正在获取设备信息...",
+          },
+          presetStyles: [
+            { id: 1, name: "星空", url: "/styles/style1.jpg" },
+            { id: 2, name: "水彩", url: "/styles/style2.jpg" },
+            { id: 3, name: "油画", url: "/styles/style3.jpg" },
+            { id: 4, name: "波普", url: "/styles/style4.jpg" },
+            { id: 5, name: "抽象", url: "/styles/style5.jpg" },
+          ],
+          customStyleCounter: 0,
+          stylesExpanded: false, // 添加推荐风格区域展开/折叠状态
+        },
+        methods: {
+          handleContentFileUpload(event) {
+            const file = event.target.files[0];
+            this.processContentFile(file);
+          },
+          handleStyleFileSelect(event) {
+            const file = event.target.files[0];
+            this.processStyleFile(file);
+
+            // 检查是否是从添加风格按钮触发的上传
+            if (event.target.hasAttribute("data-add-custom")) {
+              this.addCustomStyle(file);
+            }
+          },
+          handleImageError(event) {
+            // 尝试加载PNG格式的图片
+            const imgElement = event.target;
+            const currentSrc = imgElement.src;
+            if (currentSrc.endsWith(".jpg")) {
+              imgElement.src = currentSrc.replace(".jpg", ".png");
+            }
+          },
+          toggleStylesExpanded() {
+            // 切换推荐风格区域的展开/折叠状态
+            this.stylesExpanded = !this.stylesExpanded;
+          },
+          triggerContentUpload() {
+            document.getElementById("contentFile").click();
+          },
+          triggerStyleUpload() {
+            document.getElementById("styleFile").click();
+          },
+          triggerCustomStyleUpload() {
+            // 添加data-add-custom属性标记为自定义风格上传
+            const input = document.getElementById("styleFile");
+            input.setAttribute("data-add-custom", "true");
+            input.click();
+            // 上传完成后移除标记
+            input.addEventListener(
+              "change",
+              function () {
+                this.removeAttribute("data-add-custom");
+              },
+              { once: true },
+            );
+          },
+          handleContentDrop(event) {
+            this.contentDragover = false;
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+              this.processContentFile(files[0]);
+            }
+          },
+          handleStyleDrop(event) {
+            this.styleDragover = false;
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+              this.processStyleFile(files[0]);
+            }
+          },
+          processContentFile(file) {
+            if (file && this.isValidImageFile(file)) {
+              this.uploadedContentImage = URL.createObjectURL(file);
+              const input = document.getElementById("contentFile");
+              const dt = new DataTransfer();
+              dt.items.add(file);
+              input.files = dt.files;
+            } else {
+              alert("请选择有效的图片文件 (PNG, JPG, JPEG, GIF)");
+            }
+          },
+          processStyleFile(file) {
+            if (file && this.isValidImageFile(file)) {
+              this.uploadedStyleImage = URL.createObjectURL(file);
+              const input = document.getElementById("styleFile");
+              const dt = new DataTransfer();
+              dt.items.add(file);
+              input.files = dt.files;
+            } else {
+              alert("请选择有效的图片文件 (PNG, JPG, JPEG, GIF)");
+            }
+          },
+          // 添加自定义风格到推荐风格列表
+          addCustomStyle(file) {
+            if (file && this.isValidImageFile(file)) {
+              // 创建一个临时URL用于显示
+              const imageUrl = URL.createObjectURL(file);
+              this.customStyleCounter++;
+
+              // 添加到推荐风格列表
+              this.presetStyles.push({
+                id: 100 + this.customStyleCounter, // 使用较大的ID避免与预设风格冲突
+                name: `自定义风格 ${this.customStyleCounter}`,
+                url: imageUrl,
+                isCustom: true, // 标记为自定义风格
+              });
+
+              // 上传到服务器
+              const formData = new FormData();
+              formData.append("style_image", file);
+
+              fetch("/api/upload-style", {
+                method: "POST",
+                body: formData,
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  console.log("风格图片上传成功:", data);
+                  // 可以在这里更新URL为服务器返回的路径
+                })
+                .catch((error) => {
+                  console.error("风格图片上传失败:", error);
+                  alert("风格图片上传失败，但您仍可以在本次会话中使用它");
+                });
+            }
+          },
+          async selectPresetStyle(url) {
+            try {
+              const response = await fetch(url);
+              const blob = await response.blob();
+              const file = new File([blob], "preset-style.jpg", {
+                type: "image/jpeg",
+              });
+              this.processStyleFile(file);
+            } catch (error) {
+              console.error("加载预设风格失败:", error);
+              alert("无法加载预设风格图片");
+            }
+          },
+          isValidImageFile(file) {
+            const validTypes = [
+              "image/png",
+              "image/jpg",
+              "image/jpeg",
+              "image/gif",
+            ];
+            return validTypes.includes(file.type);
+          },
+          async fetchDeviceInfo() {
+            try {
+              const response = await fetch("/api/device-info");
+              if (response.ok) {
+                this.deviceInfo = await response.json();
+              }
+            } catch (error) {
+              console.error("获取设备信息失败:", error);
+            }
+          },
+          getStyleWeightDescription(weight) {
+            if (weight <= 6000) return "轻质风格，保留更多原图细节";
+            if (weight <= 7000) return "适中风格，平衡细节与效果";
+            if (weight <= 8000) return "推荐风格，艺术感强";
+            if (weight <= 9000) return "强烈风格，效果突出";
+            return "极端风格，最大化艺术效果";
+          },
+          getStepsItems(steps) {
+            if (steps <= 200) return "快速预览，适合测试";
+            if (steps <= 400) return "标准处理，效果适中";
+            if (steps <= 600) return "高质量，细节丰富";
+            if (steps <= 800) return "精细处理，接近专业";
+            return "极致处理，效果最佳";
+          },
+          runStyleTransfer() {
+            const contentFile = document.getElementById("contentFile").files[0];
+            const styleFile = document.getElementById("styleFile").files[0];
+
+            if (!contentFile || !styleFile) {
+              alert("请上传内容图像和风格图像");
+              return;
+            }
+
+            this.loading = true;
+            this.progress = 0;
+            this.progressText = "0%";
+            this.resultImagePath = "";
+
+            const formData = new FormData();
+            formData.append("content_img", contentFile);
+            formData.append("style_img", styleFile);
+            formData.append("style_weight", this.styleWeight);
+            formData.append("content_weight", 1);
+            formData.append("num_steps", this.numSteps);
+
+            fetch("/style-transfer", {
+              method: "POST",
+              body: formData,
+            })
+              .then((response) => {
+                if (response.status === 200) {
+                  response.json().then((data) => {
+                    const taskId = data.task_id;
+                    console.log("任务ID:", taskId);
+
+                    const eventSource = new EventSource(`/stream/${taskId}`);
+
+                    eventSource.onmessage = (event) => {
+                      try {
+                        const jsonData = event.data.replace(/^data: /, "");
+                        const taskData = JSON.parse(jsonData);
+
+                        if (taskData.progress) {
+                          const step = taskData.progress.step;
+                          this.progress = Math.min(
+                            (step / this.numSteps) * 100,
+                            100,
+                          );
+                          this.progressText = `${Math.round(this.progress)}%`;
+                        }
+
+                        if (
+                          taskData.status === "completed" &&
+                          taskData.output_path
+                        ) {
+                          this.resultImagePath = taskData.output_path;
+                          this.loading = false;
+                          eventSource.close();
+                          this.fetchHistory();
+                        }
+
+                        if (taskData.status === "failed") {
+                          alert("风格迁移失败，请稍后重试");
+                          this.loading = false;
+                          eventSource.close();
+                        }
+                      } catch (e) {
+                        console.error("Error parsing SSE data:", e);
+                      }
+                    };
+
+                    eventSource.onerror = (error) => {
+                      console.error("EventSource 连接出现错误:", error);
+                      alert("风格迁移进度获取出现问题，请稍后重试");
+                      this.loading = false;
+                      eventSource.close();
+                    };
+                  });
+                } else {
+                  console.error("风格迁移请求失败，状态码:", response.status);
+                  alert("风格迁移请求失败");
+                  this.loading = false;
+                }
+              })
+              .catch((error) => {
+                console.error("风格迁移请求失败:", error);
+                alert("风格迁移请求失败");
+                this.loading = false;
+              });
+          },
+          fetchHistory() {
+            fetch("/api/history")
+              .then((response) => response.json())
+              .then((data) => {
+                this.history = data;
+              })
+              .catch((error) => alert("获取历史记录失败: " + error));
+          },
+          toggleItems(key) {
+            if (this.expandedKeys.includes(key)) {
+              this.expandedKeys = this.expandedKeys.filter((k) => k !== key);
+            } else {
+              this.expandedKeys.push(key);
+            }
+          },
+          deleteHistory(key) {
+            if (!confirm("确定要删除这张历史记录图片吗？")) {
+              return;
+            }
+
+            fetch(`/api/delete-history?key=${encodeURIComponent(key)}`, {
+              method: "DELETE",
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                if (
+                  data.message === "Image deleted successfully." ||
+                  data.message ===
+                    "Image deleted, but history file does not exist."
+                ) {
+                  alert("删除成功");
+                  this.fetchHistory();
+                } else {
+                  alert(data.message || "删除失败");
+                }
+              })
+              .catch((error) => alert("删除失败: " + error));
+          },
+          downloadStyledImage(imagePath) {
+            const link = document.createElement("a");
+            link.href = imagePath;
+            link.download = "styled-image.png";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          },
+          downloadResultImage(imagePath) {
+            const link = document.createElement("a");
+            link.href = imagePath;
+            link.download = "result-image.png";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          },
+        },
+        mounted() {
+          this.fetchHistory();
+          this.fetchDeviceInfo();
+        },
+      });
+
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/static/sw.js")
+            .then((registration) => {
+              console.log("Service Worker registered: ", registration);
+            })
+            .catch((error) => {
+              console.error("Service Worker registration failed: ", error);
+            });
+        });
+      }
     </script>
-</body>
+  </body>
 </html>
