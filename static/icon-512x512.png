@@ -1,0 +1,52 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="nodeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4facfe;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00f2fe;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="512" height="512" rx="64" fill="url(#bgGradient)"/>
+  
+  <!-- 神经网络节点 -->
+  <circle cx="128" cy="170" r="20" fill="url(#nodeGradient)" opacity="0.9"/>
+  <circle cx="128" cy="256" r="20" fill="url(#nodeGradient)" opacity="0.9"/>
+  <circle cx="128" cy="342" r="20" fill="url(#nodeGradient)" opacity="0.9"/>
+  
+  <circle cx="256" cy="128" r="20" fill="url(#nodeGradient)" opacity="0.9"/>
+  <circle cx="256" cy="213" r="20" fill="url(#nodeGradient)" opacity="0.9"/>
+  <circle cx="256" cy="299" r="20" fill="url(#nodeGradient)" opacity="0.9"/>
+  <circle cx="256" cy="384" r="20" fill="url(#nodeGradient)" opacity="0.9"/>
+  
+  <circle cx="384" cy="170" r="20" fill="url(#nodeGradient)" opacity="0.9"/>
+  <circle cx="384" cy="256" r="20" fill="url(#nodeGradient)" opacity="0.9"/>
+  <circle cx="384" cy="342" r="20" fill="url(#nodeGradient)" opacity="0.9"/>
+  
+  <!-- 连接线 -->
+  <line x1="148" y1="170" x2="236" y2="128" stroke="white" stroke-width="4" opacity="0.6"/>
+  <line x1="148" y1="170" x2="236" y2="213" stroke="white" stroke-width="4" opacity="0.6"/>
+  <line x1="148" y1="256" x2="236" y2="213" stroke="white" stroke-width="4" opacity="0.6"/>
+  <line x1="148" y1="256" x2="236" y2="299" stroke="white" stroke-width="4" opacity="0.6"/>
+  <line x1="148" y1="342" x2="236" y2="299" stroke="white" stroke-width="4" opacity="0.6"/>
+  <line x1="148" y1="342" x2="236" y2="384" stroke="white" stroke-width="4" opacity="0.6"/>
+  
+  <line x1="276" y1="128" x2="364" y2="170" stroke="white" stroke-width="4" opacity="0.6"/>
+  <line x1="276" y1="213" x2="364" y2="170" stroke="white" stroke-width="4" opacity="0.6"/>
+  <line x1="276" y1="213" x2="364" y2="256" stroke="white" stroke-width="4" opacity="0.6"/>
+  <line x1="276" y1="299" x2="364" y2="256" stroke="white" stroke-width="4" opacity="0.6"/>
+  <line x1="276" y1="299" x2="364" y2="342" stroke="white" stroke-width="4" opacity="0.6"/>
+  <line x1="276" y1="384" x2="364" y2="342" stroke="white" stroke-width="4" opacity="0.6"/>
+  
+  <!-- 艺术画笔笔触 -->
+  <path d="M 85 426 Q 171 400 256 426 T 427 400" stroke="#ff6b6b" stroke-width="10" fill="none" opacity="0.8"/>
+  <path d="M 107 453 Q 192 440 277 453 T 405 440" stroke="#4ecdc4" stroke-width="8" fill="none" opacity="0.7"/>
+  <path d="M 96 480 Q 181 467 266 480 T 416 467" stroke="#45b7d1" stroke-width="8" fill="none" opacity="0.7"/>
+  
+  <!-- 中央标题文字 -->
+  <text x="256" y="80" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="32" font-weight="bold" opacity="0.9">NST</text>
+</svg>

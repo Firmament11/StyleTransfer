@@ -1,0 +1,12 @@
+torch~=2.5.0
+torchvision~=0.20.0
+pillow~=10.3.0
+matplotlib~=3.8.4
+
+tqdm~=4.66.4
+future~=1.0.0
+pyvista~=0.44.1
+pygame~=2.6.1
+flask~=3.0.3
+werkzeug~=3.0.3
+requests~=2.32.2

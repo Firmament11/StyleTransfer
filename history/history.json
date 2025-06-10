@@ -1,0 +1,41 @@
+{
+    "dancing": [
+        {
+            "content_img": "dancing.jpg",
+            "style_img": "picasso.jpg",
+            "style_weight": 7000.0,
+            "steps": 300,
+            "output_img": "/history/dancing_picasso_7000.0_300_be7fd83dc00847d6994b39937b100938.jpg"
+        },
+        {
+            "content_img": "dancing.jpg",
+            "style_img": "picasso.jpg",
+            "style_weight": 5000.0,
+            "steps": 300,
+            "output_img": "/history/dancing_picasso_5000.0_300_4d6990ae3fb14808a37b9c34085456f9.jpg"
+        },
+        {
+            "content_img": "dancing.jpg",
+            "style_img": "94ab7cc27e458b7841c8568528f1e3b.png",
+            "style_weight": 5900.0,
+            "steps": 395,
+            "output_img": "/history/dancing_94ab7cc27e458b7841c8568528f1e3b_5900.0_395_32b006ffa5d143198a407241f74fb52b.jpg"
+        },
+        {
+            "content_img": "dancing.jpg",
+            "style_img": "preset-style.jpg",
+            "style_weight": 7000.0,
+            "steps": 300,
+            "output_img": "/history/dancing_preset-style_7000.0_300_4ae6a218fccc403486bad8806de24e59.jpg"
+        }
+    ],
+    "logo": [
+        {
+            "content_img": "logo.jpg",
+            "style_img": "style1.jpg",
+            "style_weight": 7000.0,
+            "steps": 300,
+            "output_img": "/history/logo_style1_7000.0_300_71d53eee1fd94a4fabb2bef55fd40644.jpg"
+        }
+    ]
+}
