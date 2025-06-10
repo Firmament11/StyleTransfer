@@ -18,17 +18,17 @@
 
 ### 系统架构图
 
-![系统架构图](system_architecture.svg)
+![系统架构图](static/report/system_architecture.svg)
 
 ### 数据流架构
 
-![数据流架构图](data_flow.svg)
+![数据流架构图](static/report/data_flow.svg)
 
-![API调用流程图](api_flow.svg)
+![API调用流程图](static/report/api_flow.svg)
 
 ### 组件架构
 
-![组件架构图](component_architecture.svg)
+![组件架构图](static/report/component_architecture.svg)
 
 ## 核心算法实现
 
@@ -89,7 +89,7 @@ class StyleLoss(nn.Module):
 
 ### VGG19网络结构
 
-![VGG19网络结构图](vgg19_network.svg)
+![VGG19网络结构图](static/report/vgg19_network.svg)
 
 ## 系统模块详解
 
@@ -111,7 +111,7 @@ def image_loader(image_name, imsize):
 
 #### 预处理流程图
 
-![图像预处理流程图](image_preprocessing.svg)
+![图像预处理流程图](static/report/image_preprocessing.svg)
 
 ### 2. 风格迁移引擎
 
@@ -147,7 +147,7 @@ def run_style_transfer(cnn, normalization_mean, normalization_std,
 
 #### 优化过程可视化
 
-![优化过程可视化图](optimization_process.svg)
+![优化过程可视化图](static/report/optimization_process.svg)
 
 ### 3. 历史记录管理系统
 
@@ -180,7 +180,7 @@ def save_history(content_img, style_img, style_weight, steps, output_img_name):
 
 #### 历史记录数据结构
 
-![历史记录数据结构图](history_structure.svg)
+![历史记录数据结构图](static/report/history_structure.svg)
 
 ### 4. Web API接口设计
 
@@ -201,7 +201,7 @@ def save_history(content_img, style_img, style_weight, steps, output_img_name):
 
 #### API调用流程
 
-![API调用流程详细图](api_flow_detailed.svg)
+![API调用流程详细图](static/report/api_flow_detailed.svg)
 
 ### 5. 前端Vue.js应用
 
@@ -209,7 +209,7 @@ def save_history(content_img, style_img, style_weight, steps, output_img_name):
 
 #### 组件架构
 
-![前端组件架构图](frontend_components.svg)
+![前端组件架构图](static/report/frontend_components.svg)
 
 #### 状态管理
 
@@ -388,7 +388,7 @@ def manage_output_folder():
 
 #### 缓存策略
 
-![缓存策略图](cache_strategy.svg)
+![缓存策略图](static/report/cache_strategy.svg)
 
 ## 安全性设计
 
@@ -551,7 +551,7 @@ def monitor_system_resources():
 
 #### 微服务架构
 
-![微服务架构图](microservices_architecture.svg)
+![微服务架构图](static/report/microservices_architecture.svg)
 
 ## 测试策略
 
@@ -993,7 +993,7 @@ class TaskRecovery:
 
 ### 代码统计
 
-![代码分布统计图](code_distribution.svg)
+![代码分布统计图](static/report/code_distribution.svg)
 
 ### 技术栈总览
 
