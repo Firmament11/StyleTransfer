@@ -1,0 +1,105 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="frontendGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="webGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#34d399;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="businessGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="dlGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f87171;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="storageGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a78bfa;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Title -->
+  <text x="400" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#1f2937">神经风格迁移系统架构图</text>
+  
+  <!-- Frontend Layer -->
+  <rect x="50" y="50" width="700" height="80" rx="10" fill="url(#frontendGrad)" stroke="#1e40af" stroke-width="2"/>
+  <text x="400" y="75" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">前端层 Frontend Layer</text>
+  <rect x="70" y="90" width="120" height="30" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="130" y="108" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">Vue.js 应用</text>
+  <rect x="210" y="90" width="120" height="30" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="270" y="108" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">TailwindCSS 样式</text>
+  <rect x="350" y="90" width="120" height="30" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="410" y="108" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">响应式UI组件</text>
+  
+  <!-- Web Service Layer -->
+  <rect x="50" y="150" width="700" height="80" rx="10" fill="url(#webGrad)" stroke="#059669" stroke-width="2"/>
+  <text x="400" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">Web服务层 Web Service Layer</text>
+  <rect x="70" y="190" width="120" height="30" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="130" y="208" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">Flask Web服务器</text>
+  <rect x="210" y="190" width="120" height="30" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="270" y="208" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">RESTful API</text>
+  <rect x="350" y="190" width="120" height="30" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="410" y="208" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">文件上传处理</text>
+  <rect x="490" y="190" width="120" height="30" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="550" y="208" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">静态资源服务</text>
+  
+  <!-- Business Logic Layer -->
+  <rect x="50" y="250" width="700" height="80" rx="10" fill="url(#businessGrad)" stroke="#d97706" stroke-width="2"/>
+  <text x="400" y="275" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">业务逻辑层 Business Logic Layer</text>
+  <rect x="70" y="290" width="120" height="30" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="130" y="308" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">风格迁移引擎</text>
+  <rect x="210" y="290" width="120" height="30" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="270" y="308" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">图像预处理</text>
+  <rect x="350" y="290" width="120" height="30" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="410" y="308" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">历史记录管理</text>
+  <rect x="490" y="290" width="120" height="30" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="550" y="308" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">进度监控</text>
+  
+  <!-- Deep Learning Layer -->
+  <rect x="50" y="350" width="700" height="80" rx="10" fill="url(#dlGrad)" stroke="#dc2626" stroke-width="2"/>
+  <text x="400" y="375" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">深度学习层 Deep Learning Layer</text>
+  <rect x="70" y="390" width="120" height="30" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="130" y="408" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">VGG19预训练模型</text>
+  <rect x="210" y="390" width="120" height="30" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="270" y="408" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">内容损失计算</text>
+  <rect x="350" y="390" width="120" height="30" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="410" y="408" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">风格损失计算</text>
+  <rect x="490" y="390" width="120" height="30" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="550" y="408" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">优化器 Adam</text>
+  
+  <!-- Data Storage Layer -->
+  <rect x="50" y="450" width="700" height="80" rx="10" fill="url(#storageGrad)" stroke="#7c3aed" stroke-width="2"/>
+  <text x="400" y="475" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">数据存储层 Data Storage Layer</text>
+  <rect x="70" y="490" width="120" height="30" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="130" y="508" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">上传文件存储</text>
+  <rect x="210" y="490" width="120" height="30" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="270" y="508" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">风格图像库</text>
+  <rect x="350" y="490" width="120" height="30" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="410" y="508" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">历史记录JSON</text>
+  <rect x="490" y="490" width="120" height="30" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="550" y="508" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">生成结果存储</text>
+  
+  <!-- Arrows -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#374151" />
+    </marker>
+  </defs>
+  
+  <!-- Frontend to Web Service -->
+  <line x1="400" y1="130" x2="400" y2="150" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Web Service to Business Logic -->
+  <line x1="400" y1="230" x2="400" y2="250" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Business Logic to Deep Learning -->
+  <line x1="400" y1="330" x2="400" y2="350" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Business Logic to Data Storage -->
+  <line x1="400" y1="330" x2="400" y2="450" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)" stroke-dasharray="5,5"/>
+  
+</svg>

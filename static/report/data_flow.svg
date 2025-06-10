@@ -1,0 +1,133 @@
+<svg width="900" height="700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="inputGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="processGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#34d399;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="modelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="outputGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f87171;stop-opacity:1" />
+    </linearGradient>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#374151" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="450" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#1f2937">神经风格迁移数据流架构图</text>
+  
+  <!-- Input Layer -->
+  <rect x="50" y="60" width="200" height="120" rx="10" fill="url(#inputGrad)" stroke="#1e40af" stroke-width="2"/>
+  <text x="150" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">输入层</text>
+  <rect x="70" y="100" width="160" height="25" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="150" y="115" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">内容图像上传</text>
+  <rect x="70" y="135" width="160" height="25" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="150" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">风格图像选择</text>
+  
+  <!-- Preprocessing -->
+  <rect x="350" y="60" width="200" height="120" rx="10" fill="url(#processGrad)" stroke="#059669" stroke-width="2"/>
+  <text x="450" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">预处理</text>
+  <rect x="370" y="100" width="160" height="25" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="450" y="115" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">图像尺寸调整</text>
+  <rect x="370" y="135" width="160" height="25" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="450" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">张量转换</text>
+  
+  <!-- VGG19 Model -->
+  <rect x="650" y="60" width="200" height="120" rx="10" fill="url(#modelGrad)" stroke="#d97706" stroke-width="2"/>
+  <text x="750" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">VGG19模型</text>
+  <rect x="670" y="100" width="160" height="25" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="750" y="115" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">特征提取</text>
+  <rect x="670" y="135" width="160" height="25" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="750" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">多层特征图</text>
+  
+  <!-- Content Loss -->
+  <rect x="200" y="220" width="180" height="80" rx="10" fill="#8b5cf6" stroke="#7c3aed" stroke-width="2"/>
+  <text x="290" y="245" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">内容损失</text>
+  <text x="290" y="265" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">conv4_2层特征</text>
+  <text x="290" y="280" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">MSE损失计算</text>
+  
+  <!-- Style Loss -->
+  <rect x="520" y="220" width="180" height="80" rx="10" fill="#ec4899" stroke="#db2777" stroke-width="2"/>
+  <text x="610" y="245" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">风格损失</text>
+  <text x="610" y="265" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">Gram矩阵计算</text>
+  <text x="610" y="280" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">多层风格特征</text>
+  
+  <!-- Optimization -->
+  <rect x="350" y="340" width="200" height="80" rx="10" fill="#06b6d4" stroke="#0891b2" stroke-width="2"/>
+  <text x="450" y="365" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">优化过程</text>
+  <text x="450" y="385" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">Adam优化器</text>
+  <text x="450" y="400" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">梯度下降</text>
+  
+  <!-- Output -->
+  <rect x="350" y="460" width="200" height="120" rx="10" fill="url(#outputGrad)" stroke="#dc2626" stroke-width="2"/>
+  <text x="450" y="485" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">输出层</text>
+  <rect x="370" y="500" width="160" height="25" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="450" y="515" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">风格化图像</text>
+  <rect x="370" y="535" width="160" height="25" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="450" y="550" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">历史记录保存</text>
+  
+  <!-- Storage -->
+  <rect x="650" y="460" width="200" height="120" rx="10" fill="#64748b" stroke="#475569" stroke-width="2"/>
+  <text x="750" y="485" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">存储系统</text>
+  <rect x="670" y="500" width="160" height="25" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="750" y="515" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">文件系统存储</text>
+  <rect x="670" y="535" width="160" height="25" rx="5" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1"/>
+  <text x="750" y="550" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">JSON元数据</text>
+  
+  <!-- Progress Monitor -->
+  <rect x="50" y="340" width="180" height="80" rx="10" fill="#84cc16" stroke="#65a30d" stroke-width="2"/>
+  <text x="140" y="365" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">进度监控</text>
+  <text x="140" y="385" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">实时进度更新</text>
+  <text x="140" y="400" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">损失值监控</text>
+  
+  <!-- Arrows -->
+  <!-- Input to Preprocessing -->
+  <line x1="250" y1="120" x2="350" y2="120" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Preprocessing to VGG19 -->
+  <line x1="550" y1="120" x2="650" y2="120" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- VGG19 to Content Loss -->
+  <line x1="700" y1="180" x2="350" y2="240" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- VGG19 to Style Loss -->
+  <line x1="750" y1="180" x2="650" y2="240" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Content Loss to Optimization -->
+  <line x1="350" y1="280" x2="420" y2="340" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Style Loss to Optimization -->
+  <line x1="580" y1="300" x2="480" y2="340" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Optimization to Output -->
+  <line x1="450" y1="420" x2="450" y2="460" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Output to Storage -->
+  <line x1="550" y1="520" x2="650" y2="520" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Progress Monitor to Optimization -->
+  <line x1="230" y1="380" x2="350" y2="380" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Feedback loop -->
+  <path d="M 450 340 Q 300 300 300 380 Q 300 420 350 420" stroke="#374151" stroke-width="2" fill="none" marker-end="url(#arrowhead)" stroke-dasharray="5,5"/>
+  
+  <!-- Data flow labels -->
+  <text x="300" y="110" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">原始图像</text>
+  <text x="600" y="110" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">预处理张量</text>
+  <text x="500" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">特征图</text>
+  <text x="400" y="320" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">损失值</text>
+  <text x="450" y="440" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">优化结果</text>
+  <text x="600" y="510" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">最终图像</text>
+  
+  <!-- Iteration indicator -->
+  <text x="250" y="320" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">迭代优化</text>
+  
+</svg>

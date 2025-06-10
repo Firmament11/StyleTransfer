@@ -1,0 +1,126 @@
+<svg width="900" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="initGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="lossGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f87171;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="optimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#34d399;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="updateGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:1" />
+    </linearGradient>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#374151" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="450" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#1f2937">神经风格迁移优化过程可视化</text>
+  
+  <!-- Initialization -->
+  <rect x="50" y="60" width="150" height="100" rx="10" fill="url(#initGrad)" stroke="#1e40af" stroke-width="2"/>
+  <text x="125" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">初始化</text>
+  <text x="125" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">输入图像复制</text>
+  <text x="125" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">requires_grad=True</text>
+  <text x="125" y="135" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">Adam优化器</text>
+  <text x="125" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">lr=0.001</text>
+  
+  <!-- Forward Pass -->
+  <rect x="250" y="60" width="150" height="100" rx="10" fill="url(#lossGrad)" stroke="#dc2626" stroke-width="2"/>
+  <text x="325" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">前向传播</text>
+  <text x="325" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">VGG19特征提取</text>
+  <text x="325" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">内容损失计算</text>
+  <text x="325" y="135" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">风格损失计算</text>
+  <text x="325" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">总损失 = α×L_c + β×L_s</text>
+  
+  <!-- Backward Pass -->
+  <rect x="450" y="60" width="150" height="100" rx="10" fill="url(#optimGrad)" stroke="#059669" stroke-width="2"/>
+  <text x="525" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">反向传播</text>
+  <text x="525" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">loss.backward()</text>
+  <text x="525" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">梯度计算</text>
+  <text x="525" y="135" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">∂L/∂input_img</text>
+  <text x="525" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">梯度累积</text>
+  
+  <!-- Parameter Update -->
+  <rect x="650" y="60" width="150" height="100" rx="10" fill="url(#updateGrad)" stroke="#d97706" stroke-width="2"/>
+  <text x="725" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">参数更新</text>
+  <text x="725" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">optimizer.step()</text>
+  <text x="725" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">Adam动量更新</text>
+  <text x="725" y="135" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">像素值调整</text>
+  <text x="725" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">梯度清零</text>
+  
+  <!-- Loss Components -->
+  <rect x="50" y="200" width="200" height="120" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="150" y="225" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#92400e">损失函数组成</text>
+  <rect x="70" y="240" width="160" height="25" rx="5" fill="rgba(146,64,14,0.1)" stroke="#92400e" stroke-width="1"/>
+  <text x="150" y="255" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#92400e">内容损失 (Content Loss)</text>
+  <rect x="70" y="270" width="160" height="25" rx="5" fill="rgba(146,64,14,0.1)" stroke="#92400e" stroke-width="1"/>
+  <text x="150" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#92400e">风格损失 (Style Loss)</text>
+  <text x="150" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#92400e">权重比例: α=1, β=1000000</text>
+  
+  <!-- Optimization Progress -->
+  <rect x="300" y="200" width="250" height="120" rx="10" fill="#e0f2fe" stroke="#0891b2" stroke-width="2"/>
+  <text x="425" y="225" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#0e7490">优化进度监控</text>
+  
+  <!-- Progress Chart -->
+  <g transform="translate(320, 240)">
+    <!-- Chart background -->
+    <rect x="0" y="0" width="210" height="60" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+    
+    <!-- Loss curve -->
+    <polyline points="10,50 30,45 50,35 70,28 90,22 110,18 130,15 150,13 170,12 190,11" 
+              stroke="#ef4444" stroke-width="2" fill="none"/>
+    
+    <!-- Axes -->
+    <line x1="10" y1="60" x2="200" y2="60" stroke="#64748b" stroke-width="1"/>
+    <line x1="10" y1="60" x2="10" y2="5" stroke="#64748b" stroke-width="1"/>
+    
+    <!-- Labels -->
+    <text x="105" y="75" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#64748b">迭代次数</text>
+    <text x="5" y="35" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#64748b" transform="rotate(-90, 5, 35)">损失值</text>
+  </g>
+  
+  <!-- Convergence Criteria -->
+  <rect x="600" y="200" width="200" height="120" rx="10" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="700" y="225" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#15803d">收敛条件</text>
+  <text x="700" y="245" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#15803d">最大迭代次数: 300</text>
+  <text x="700" y="260" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#15803d">损失阈值: 1e-6</text>
+  <text x="700" y="275" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#15803d">梯度范数: 1e-8</text>
+  <text x="700" y="290" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#15803d">早停机制</text>
+  <text x="700" y="305" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#15803d">质量评估</text>
+  
+  <!-- Iteration Loop -->
+  <rect x="200" y="360" width="500" height="80" rx="10" fill="#f8fafc" stroke="#64748b" stroke-width="2" stroke-dasharray="5,5"/>
+  <text x="450" y="385" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#374151">迭代循环 (Epoch Loop)</text>
+  <text x="450" y="405" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">for epoch in range(num_steps):</text>
+  <text x="450" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">    前向传播 → 损失计算 → 反向传播 → 参数更新</text>
+  
+  <!-- Arrows -->
+  <line x1="200" y1="110" x2="250" y2="110" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="400" y1="110" x2="450" y2="110" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="600" y1="110" x2="650" y2="110" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Feedback loop -->
+  <path d="M 725 160 Q 850 200 850 400 Q 850 450 125 450 Q 50 450 50 200 Q 50 110 50 110" 
+        stroke="#374151" stroke-width="2" fill="none" marker-end="url(#arrowhead)" stroke-dasharray="3,3"/>
+  
+  <!-- Loop label -->
+  <text x="850" y="320" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280" transform="rotate(90, 850, 320)">迭代循环</text>
+  
+  <!-- Code Example -->
+  <rect x="50" y="480" width="800" height="100" rx="5" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="60" y="500" font-family="Courier New, monospace" font-size="10" fill="#e2e8f0">def run_style_transfer(cnn, content_img, style_img, input_img, num_steps=300):</text>
+  <text x="60" y="515" font-family="Courier New, monospace" font-size="10" fill="#e2e8f0">    optimizer = optim.Adam([input_img], lr=0.001)</text>
+  <text x="60" y="530" font-family="Courier New, monospace" font-size="10" fill="#e2e8f0">    for epoch in range(num_steps):</text>
+  <text x="60" y="545" font-family="Courier New, monospace" font-size="10" fill="#e2e8f0">        optimizer.zero_grad()</text>
+  <text x="60" y="560" font-family="Courier New, monospace" font-size="10" fill="#e2e8f0">        total_loss = content_loss + style_loss</text>
+  <text x="60" y="575" font-family="Courier New, monospace" font-size="10" fill="#e2e8f0">        total_loss.backward(); optimizer.step()</text>
+  
+</svg>

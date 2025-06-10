@@ -1,0 +1,202 @@
+<svg width="1000" height="700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="clientGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="serverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#34d399;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="processGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="storageGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a78bfa;stop-opacity:1" />
+    </linearGradient>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#374151" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="500" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#1f2937">API调用流程图</text>
+  
+  <!-- Client Side -->
+  <rect x="50" y="60" width="200" height="500" rx="10" fill="url(#clientGrad)" stroke="#1e40af" stroke-width="2" opacity="0.1"/>
+  <text x="150" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#1e40af">客户端 (Frontend)</text>
+  
+  <!-- File Upload -->
+  <rect x="70" y="100" width="160" height="60" rx="5" fill="url(#clientGrad)" stroke="#1e40af" stroke-width="1"/>
+  <text x="150" y="125" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">文件上传</text>
+  <text x="150" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">内容图像选择</text>
+  <text x="150" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">风格图像选择</text>
+  
+  <!-- Parameter Setting -->
+  <rect x="70" y="180" width="160" height="60" rx="5" fill="url(#clientGrad)" stroke="#1e40af" stroke-width="1"/>
+  <text x="150" y="205" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">参数设置</text>
+  <text x="150" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">风格权重</text>
+  <text x="150" y="230" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">迭代次数</text>
+  
+  <!-- API Request -->
+  <rect x="70" y="260" width="160" height="60" rx="5" fill="url(#clientGrad)" stroke="#1e40af" stroke-width="1"/>
+  <text x="150" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">API请求</text>
+  <text x="150" y="300" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">POST /api/style-transfer</text>
+  <text x="150" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">FormData上传</text>
+  
+  <!-- Progress Monitor -->
+  <rect x="70" y="340" width="160" height="60" rx="5" fill="url(#clientGrad)" stroke="#1e40af" stroke-width="1"/>
+  <text x="150" y="365" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">进度监控</text>
+  <text x="150" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">WebSocket连接</text>
+  <text x="150" y="390" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">实时更新</text>
+  
+  <!-- Result Display -->
+  <rect x="70" y="420" width="160" height="60" rx="5" fill="url(#clientGrad)" stroke="#1e40af" stroke-width="1"/>
+  <text x="150" y="445" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">结果展示</text>
+  <text x="150" y="460" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">图像预览</text>
+  <text x="150" y="470" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">下载链接</text>
+  
+  <!-- Server Side -->
+  <rect x="350" y="60" width="300" height="500" rx="10" fill="url(#serverGrad)" stroke="#059669" stroke-width="2" opacity="0.1"/>
+  <text x="500" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#059669">服务端 (Backend)</text>
+  
+  <!-- Request Validation -->
+  <rect x="370" y="100" width="120" height="50" rx="5" fill="url(#serverGrad)" stroke="#059669" stroke-width="1"/>
+  <text x="430" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">请求验证</text>
+  <text x="430" y="135" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">文件格式检查</text>
+  <text x="430" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">大小限制</text>
+  
+  <!-- File Processing -->
+  <rect x="510" y="100" width="120" height="50" rx="5" fill="url(#serverGrad)" stroke="#059669" stroke-width="1"/>
+  <text x="570" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">文件处理</text>
+  <text x="570" y="135" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">临时存储</text>
+  <text x="570" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">路径生成</text>
+  
+  <!-- Image Loading -->
+  <rect x="370" y="170" width="120" height="50" rx="5" fill="url(#serverGrad)" stroke="#059669" stroke-width="1"/>
+  <text x="430" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">图像加载</text>
+  <text x="430" y="205" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">PIL处理</text>
+  <text x="430" y="215" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">张量转换</text>
+  
+  <!-- Model Loading -->
+  <rect x="510" y="170" width="120" height="50" rx="5" fill="url(#serverGrad)" stroke="#059669" stroke-width="1"/>
+  <text x="570" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">模型加载</text>
+  <text x="570" y="205" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">VGG19初始化</text>
+  <text x="570" y="215" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">GPU设备设置</text>
+  
+  <!-- Style Transfer -->
+  <rect x="370" y="240" width="260" height="80" rx="5" fill="url(#processGrad)" stroke="#d97706" stroke-width="1"/>
+  <text x="500" y="265" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">风格迁移处理</text>
+  <text x="500" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">特征提取 → 损失计算 → 优化迭代</text>
+  <text x="500" y="300" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">进度回调 → 实时监控</text>
+  <text x="500" y="315" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">Adam优化器 → 梯度下降</text>
+  
+  <!-- Result Processing -->
+  <rect x="370" y="340" width="120" height="50" rx="5" fill="url(#serverGrad)" stroke="#059669" stroke-width="1"/>
+  <text x="430" y="360" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">结果处理</text>
+  <text x="430" y="375" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">张量转图像</text>
+  <text x="430" y="385" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">格式转换</text>
+  
+  <!-- File Saving -->
+  <rect x="510" y="340" width="120" height="50" rx="5" fill="url(#serverGrad)" stroke="#059669" stroke-width="1"/>
+  <text x="570" y="360" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">文件保存</text>
+  <text x="570" y="375" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">输出目录</text>
+  <text x="570" y="385" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">唯一文件名</text>
+  
+  <!-- History Management -->
+  <rect x="370" y="410" width="120" height="50" rx="5" fill="url(#serverGrad)" stroke="#059669" stroke-width="1"/>
+  <text x="430" y="430" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">历史管理</text>
+  <text x="430" y="445" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">JSON记录</text>
+  <text x="430" y="455" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">元数据存储</text>
+  
+  <!-- Response Generation -->
+  <rect x="510" y="410" width="120" height="50" rx="5" fill="url(#serverGrad)" stroke="#059669" stroke-width="1"/>
+  <text x="570" y="430" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">响应生成</text>
+  <text x="570" y="445" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">JSON响应</text>
+  <text x="570" y="455" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">状态码</text>
+  
+  <!-- Storage System -->
+  <rect x="750" y="60" width="200" height="500" rx="10" fill="url(#storageGrad)" stroke="#7c3aed" stroke-width="2" opacity="0.1"/>
+  <text x="850" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#7c3aed">存储系统</text>
+  
+  <!-- Upload Storage -->
+  <rect x="770" y="100" width="160" height="60" rx="5" fill="url(#storageGrad)" stroke="#7c3aed" stroke-width="1"/>
+  <text x="850" y="125" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">上传存储</text>
+  <text x="850" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">/uploads/</text>
+  <text x="850" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">临时文件</text>
+  
+  <!-- Style Library -->
+  <rect x="770" y="180" width="160" height="60" rx="5" fill="url(#storageGrad)" stroke="#7c3aed" stroke-width="1"/>
+  <text x="850" y="205" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">风格库</text>
+  <text x="850" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">/static/styles/</text>
+  <text x="850" y="230" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">预设风格</text>
+  
+  <!-- Output Storage -->
+  <rect x="770" y="260" width="160" height="60" rx="5" fill="url(#storageGrad)" stroke="#7c3aed" stroke-width="1"/>
+  <text x="850" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">输出存储</text>
+  <text x="850" y="300" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">/static/outputs/</text>
+  <text x="850" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">结果图像</text>
+  
+  <!-- History Storage -->
+  <rect x="770" y="340" width="160" height="60" rx="5" fill="url(#storageGrad)" stroke="#7c3aed" stroke-width="1"/>
+  <text x="850" y="365" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">历史存储</text>
+  <text x="850" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">/static/history/</text>
+  <text x="850" y="390" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">JSON元数据</text>
+  
+  <!-- Cache Storage -->
+  <rect x="770" y="420" width="160" height="60" rx="5" fill="url(#storageGrad)" stroke="#7c3aed" stroke-width="1"/>
+  <text x="850" y="445" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">缓存存储</text>
+  <text x="850" y="460" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">模型缓存</text>
+  <text x="850" y="470" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">特征缓存</text>
+  
+  <!-- Arrows -->
+  <!-- Client to Server -->
+  <line x1="230" y1="290" x2="370" y2="125" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Server internal flow -->
+  <line x1="490" y1="125" x2="510" y2="125" stroke="#374151" stroke-width="1" marker-end="url(#arrowhead)"/>
+  <line x1="430" y1="150" x2="430" y2="170" stroke="#374151" stroke-width="1" marker-end="url(#arrowhead)"/>
+  <line x1="570" y1="150" x2="570" y2="170" stroke="#374151" stroke-width="1" marker-end="url(#arrowhead)"/>
+  <line x1="500" y1="220" x2="500" y2="240" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="500" y1="320" x2="500" y2="340" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="500" y1="390" x2="500" y2="410" stroke="#374151" stroke-width="1" marker-end="url(#arrowhead)"/>
+  
+  <!-- Server to Storage -->
+  <line x1="630" y1="125" x2="770" y2="125" stroke="#374151" stroke-width="1" marker-end="url(#arrowhead)"/>
+  <line x1="630" y1="365" x2="770" y2="285" stroke="#374151" stroke-width="1" marker-end="url(#arrowhead)"/>
+  <line x1="630" y1="435" x2="770" y2="365" stroke="#374151" stroke-width="1" marker-end="url(#arrowhead)"/>
+  
+  <!-- Server to Client -->
+  <line x1="370" y1="435" x2="230" y2="450" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Progress feedback -->
+  <path d="M 500 280 Q 300 300 230 370" stroke="#f59e0b" stroke-width="2" fill="none" marker-end="url(#arrowhead)" stroke-dasharray="3,3"/>
+  
+  <!-- API Endpoints -->
+  <rect x="50" y="580" width="900" height="100" rx="5" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="500" y="600" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#374151">主要API端点</text>
+  
+  <text x="70" y="620" font-family="Courier New, monospace" font-size="10" fill="#1e293b">POST /api/style-transfer</text>
+  <text x="250" y="620" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">- 风格迁移处理</text>
+  
+  <text x="70" y="635" font-family="Courier New, monospace" font-size="10" fill="#1e293b">GET /api/history</text>
+  <text x="250" y="635" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">- 获取历史记录</text>
+  
+  <text x="70" y="650" font-family="Courier New, monospace" font-size="10" fill="#1e293b">DELETE /api/delete-history/&lt;key&gt;</text>
+  <text x="250" y="650" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">- 删除历史记录</text>
+  
+  <text x="70" y="665" font-family="Courier New, monospace" font-size="10" fill="#1e293b">GET /api/styles</text>
+  <text x="250" y="665" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">- 获取风格列表</text>
+  
+  <text x="500" y="620" font-family="Courier New, monospace" font-size="10" fill="#1e293b">GET /static/outputs/&lt;filename&gt;</text>
+  <text x="680" y="620" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">- 下载结果图像</text>
+  
+  <text x="500" y="635" font-family="Courier New, monospace" font-size="10" fill="#1e293b">GET /static/styles/&lt;filename&gt;</text>
+  <text x="680" y="635" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">- 获取风格图像</text>
+  
+  <text x="500" y="650" font-family="Courier New, monospace" font-size="10" fill="#1e293b">WebSocket /ws/progress</text>
+  <text x="680" y="650" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">- 实时进度推送</text>
+  
+</svg>

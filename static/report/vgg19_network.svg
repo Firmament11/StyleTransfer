@@ -1,0 +1,222 @@
+<svg width="1000" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="convGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="poolGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f87171;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="fcGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#34d399;stop-opacity:1" />
+    </linearGradient>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#374151" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="500" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#1f2937">VGG19网络结构图</text>
+  
+  <!-- Input -->
+  <rect x="20" y="50" width="60" height="80" rx="5" fill="#f3f4f6" stroke="#9ca3af" stroke-width="2"/>
+  <text x="50" y="75" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#374151">输入</text>
+  <text x="50" y="90" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">224×224×3</text>
+  
+  <!-- Block 1 -->
+  <g id="block1">
+    <rect x="100" y="50" width="50" height="80" rx="5" fill="url(#convGrad)" stroke="#1e40af" stroke-width="1"/>
+    <text x="125" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">Conv1_1</text>
+    <text x="125" y="82" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">3×3×64</text>
+    <text x="125" y="94" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">ReLU</text>
+    
+    <rect x="160" y="50" width="50" height="80" rx="5" fill="url(#convGrad)" stroke="#1e40af" stroke-width="1"/>
+    <text x="185" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">Conv1_2</text>
+    <text x="185" y="82" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">3×3×64</text>
+    <text x="185" y="94" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">ReLU</text>
+    
+    <rect x="220" y="60" width="40" height="60" rx="5" fill="url(#poolGrad)" stroke="#dc2626" stroke-width="1"/>
+    <text x="240" y="80" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">Pool1</text>
+    <text x="240" y="92" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">2×2</text>
+    <text x="240" y="104" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">MaxPool</text>
+  </g>
+  
+  <!-- Block 2 -->
+  <g id="block2">
+    <rect x="100" y="150" width="50" height="80" rx="5" fill="url(#convGrad)" stroke="#1e40af" stroke-width="1"/>
+    <text x="125" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">Conv2_1</text>
+    <text x="125" y="182" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">3×3×128</text>
+    <text x="125" y="194" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">ReLU</text>
+    
+    <rect x="160" y="150" width="50" height="80" rx="5" fill="url(#convGrad)" stroke="#1e40af" stroke-width="1"/>
+    <text x="185" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">Conv2_2</text>
+    <text x="185" y="182" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">3×3×128</text>
+    <text x="185" y="194" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">ReLU</text>
+    
+    <rect x="220" y="160" width="40" height="60" rx="5" fill="url(#poolGrad)" stroke="#dc2626" stroke-width="1"/>
+    <text x="240" y="180" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">Pool2</text>
+    <text x="240" y="192" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">2×2</text>
+    <text x="240" y="204" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">MaxPool</text>
+  </g>
+  
+  <!-- Block 3 -->
+  <g id="block3">
+    <rect x="300" y="50" width="45" height="80" rx="5" fill="url(#convGrad)" stroke="#1e40af" stroke-width="1"/>
+    <text x="322" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">Conv3_1</text>
+    <text x="322" y="82" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">3×3×256</text>
+    <text x="322" y="94" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">ReLU</text>
+    
+    <rect x="355" y="50" width="45" height="80" rx="5" fill="url(#convGrad)" stroke="#1e40af" stroke-width="1"/>
+    <text x="377" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">Conv3_2</text>
+    <text x="377" y="82" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">3×3×256</text>
+    <text x="377" y="94" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">ReLU</text>
+    
+    <rect x="410" y="50" width="45" height="80" rx="5" fill="url(#convGrad)" stroke="#1e40af" stroke-width="1"/>
+    <text x="432" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">Conv3_3</text>
+    <text x="432" y="82" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">3×3×256</text>
+    <text x="432" y="94" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">ReLU</text>
+    
+    <rect x="465" y="50" width="45" height="80" rx="5" fill="url(#convGrad)" stroke="#1e40af" stroke-width="1"/>
+    <text x="487" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">Conv3_4</text>
+    <text x="487" y="82" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">3×3×256</text>
+    <text x="487" y="94" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">ReLU</text>
+    
+    <rect x="520" y="60" width="40" height="60" rx="5" fill="url(#poolGrad)" stroke="#dc2626" stroke-width="1"/>
+    <text x="540" y="80" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">Pool3</text>
+    <text x="540" y="92" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">2×2</text>
+    <text x="540" y="104" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">MaxPool</text>
+  </g>
+  
+  <!-- Block 4 -->
+  <g id="block4">
+    <rect x="300" y="150" width="45" height="80" rx="5" fill="url(#convGrad)" stroke="#1e40af" stroke-width="1"/>
+    <text x="322" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">Conv4_1</text>
+    <text x="322" y="182" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">3×3×512</text>
+    <text x="322" y="194" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">ReLU</text>
+    
+    <rect x="355" y="150" width="45" height="80" rx="5" fill="url(#convGrad)" stroke="#1e40af" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="377" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">Conv4_2</text>
+    <text x="377" y="182" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">3×3×512</text>
+    <text x="377" y="194" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">ReLU</text>
+    <text x="377" y="206" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" fill="yellow">内容特征</text>
+    
+    <rect x="410" y="150" width="45" height="80" rx="5" fill="url(#convGrad)" stroke="#1e40af" stroke-width="1"/>
+    <text x="432" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">Conv4_3</text>
+    <text x="432" y="182" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">3×3×512</text>
+    <text x="432" y="194" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">ReLU</text>
+    
+    <rect x="465" y="150" width="45" height="80" rx="5" fill="url(#convGrad)" stroke="#1e40af" stroke-width="1"/>
+    <text x="487" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">Conv4_4</text>
+    <text x="487" y="182" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">3×3×512</text>
+    <text x="487" y="194" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">ReLU</text>
+    
+    <rect x="520" y="160" width="40" height="60" rx="5" fill="url(#poolGrad)" stroke="#dc2626" stroke-width="1"/>
+    <text x="540" y="180" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">Pool4</text>
+    <text x="540" y="192" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">2×2</text>
+    <text x="540" y="204" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">MaxPool</text>
+  </g>
+  
+  <!-- Block 5 -->
+  <g id="block5">
+    <rect x="600" y="50" width="45" height="80" rx="5" fill="url(#convGrad)" stroke="#1e40af" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="622" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">Conv5_1</text>
+    <text x="622" y="82" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">3×3×512</text>
+    <text x="622" y="94" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">ReLU</text>
+    <text x="622" y="106" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" fill="yellow">风格特征</text>
+    
+    <rect x="655" y="50" width="45" height="80" rx="5" fill="url(#convGrad)" stroke="#1e40af" stroke-width="1"/>
+    <text x="677" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">Conv5_2</text>
+    <text x="677" y="82" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">3×3×512</text>
+    <text x="677" y="94" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">ReLU</text>
+    
+    <rect x="710" y="50" width="45" height="80" rx="5" fill="url(#convGrad)" stroke="#1e40af" stroke-width="1"/>
+    <text x="732" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">Conv5_3</text>
+    <text x="732" y="82" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">3×3×512</text>
+    <text x="732" y="94" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">ReLU</text>
+    
+    <rect x="765" y="50" width="45" height="80" rx="5" fill="url(#convGrad)" stroke="#1e40af" stroke-width="1"/>
+    <text x="787" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">Conv5_4</text>
+    <text x="787" y="82" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">3×3×512</text>
+    <text x="787" y="94" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">ReLU</text>
+    
+    <rect x="820" y="60" width="40" height="60" rx="5" fill="url(#poolGrad)" stroke="#dc2626" stroke-width="1"/>
+    <text x="840" y="80" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">Pool5</text>
+    <text x="840" y="92" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">2×2</text>
+    <text x="840" y="104" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" fill="white">MaxPool</text>
+  </g>
+  
+  <!-- Fully Connected Layers -->
+  <g id="fc_layers">
+    <rect x="600" y="150" width="60" height="80" rx="5" fill="url(#fcGrad)" stroke="#059669" stroke-width="1"/>
+    <text x="630" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white">FC6</text>
+    <text x="630" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">4096</text>
+    <text x="630" y="205" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">ReLU+Dropout</text>
+    
+    <rect x="680" y="150" width="60" height="80" rx="5" fill="url(#fcGrad)" stroke="#059669" stroke-width="1"/>
+    <text x="710" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white">FC7</text>
+    <text x="710" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">4096</text>
+    <text x="710" y="205" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">ReLU+Dropout</text>
+    
+    <rect x="760" y="150" width="60" height="80" rx="5" fill="url(#fcGrad)" stroke="#059669" stroke-width="1"/>
+    <text x="790" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white">FC8</text>
+    <text x="790" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">1000</text>
+    <text x="790" y="205" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">Softmax</text>
+  </g>
+  
+  <!-- Output -->
+  <rect x="900" y="150" width="60" height="80" rx="5" fill="#f3f4f6" stroke="#9ca3af" stroke-width="2"/>
+  <text x="930" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#374151">输出</text>
+  <text x="930" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">1000类</text>
+  <text x="930" y="205" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#6b7280">分类概率</text>
+  
+  <!-- Arrows -->
+  <line x1="80" y1="90" x2="100" y2="90" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="260" y1="90" x2="300" y2="90" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="260" y1="190" x2="300" y2="190" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="560" y1="90" x2="600" y2="90" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="560" y1="190" x2="600" y2="190" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="860" y1="90" x2="900" y2="190" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="820" y1="190" x2="900" y2="190" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Feature extraction indicators -->
+  <rect x="50" y="300" width="900" height="120" rx="10" fill="#f9fafb" stroke="#d1d5db" stroke-width="1"/>
+  <text x="500" y="325" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#374151">特征提取层级说明</text>
+  
+  <!-- Style features -->
+  <rect x="80" y="340" width="180" height="60" rx="5" fill="#fef3c7" stroke="#f59e0b" stroke-width="1"/>
+  <text x="170" y="360" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#92400e">风格特征提取层</text>
+  <text x="170" y="375" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#92400e">Conv1_1, Conv2_1, Conv3_1,</text>
+  <text x="170" y="387" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#92400e">Conv4_1, Conv5_1</text>
+  
+  <!-- Content features -->
+  <rect x="300" y="340" width="180" height="60" rx="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="1"/>
+  <text x="390" y="360" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#1e40af">内容特征提取层</text>
+  <text x="390" y="375" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#1e40af">Conv4_2</text>
+  <text x="390" y="387" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#1e40af">高级语义特征</text>
+  
+  <!-- Loss computation -->
+  <rect x="520" y="340" width="180" height="60" rx="5" fill="#fce7f3" stroke="#ec4899" stroke-width="1"/>
+  <text x="610" y="360" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#be185d">损失函数计算</text>
+  <text x="610" y="375" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#be185d">内容损失 + 风格损失</text>
+  <text x="610" y="387" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#be185d">Gram矩阵相似度</text>
+  
+  <!-- Optimization -->
+  <rect x="740" y="340" width="180" height="60" rx="5" fill="#dcfce7" stroke="#16a34a" stroke-width="1"/>
+  <text x="830" y="360" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#15803d">优化过程</text>
+  <text x="830" y="375" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#15803d">Adam优化器</text>
+  <text x="830" y="387" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#15803d">梯度反向传播</text>
+  
+  <!-- Legend -->
+  <text x="50" y="460" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#374151">图例:</text>
+  <rect x="100" y="450" width="20" height="15" fill="url(#convGrad)"/>
+  <text x="125" y="462" font-family="Arial, sans-serif" font-size="10" fill="#374151">卷积层</text>
+  <rect x="180" y="450" width="20" height="15" fill="url(#poolGrad)"/>
+  <text x="205" y="462" font-family="Arial, sans-serif" font-size="10" fill="#374151">池化层</text>
+  <rect x="260" y="450" width="20" height="15" fill="url(#fcGrad)"/>
+  <text x="285" y="462" font-family="Arial, sans-serif" font-size="10" fill="#374151">全连接层</text>
+  <rect x="360" y="450" width="20" height="15" fill="none" stroke="#1e40af" stroke-width="2" stroke-dasharray="3,3"/>
+  <text x="385" y="462" font-family="Arial, sans-serif" font-size="10" fill="#374151">特征提取层</text>
+  
+</svg>

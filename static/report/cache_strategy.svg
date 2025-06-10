@@ -1,0 +1,130 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="clientGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1D4ED8;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="cacheGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="computeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F59E0B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D97706;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#64748B" />
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="600" fill="#F8FAFC"/>
+  
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#1E293B">缓存策略架构 Cache Strategy Architecture</text>
+  
+  <!-- Client Request -->
+  <g>
+    <rect x="50" y="80" width="120" height="60" rx="10" fill="url(#clientGrad)" filter="url(#shadow)"/>
+    <text x="110" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">客户端请求</text>
+    <text x="110" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">Client Request</text>
+  </g>
+  
+  <!-- Cache Check Decision -->
+  <g>
+    <polygon points="250,80 320,110 250,140 180,110" fill="#8B5CF6" filter="url(#shadow)"/>
+    <text x="250" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">检查缓存</text>
+    <text x="250" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="white">Check Cache</text>
+  </g>
+  
+  <!-- Cache Hit Path -->
+  <g>
+    <rect x="400" y="50" width="120" height="60" rx="10" fill="url(#cacheGrad)" filter="url(#shadow)"/>
+    <text x="460" y="75" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">返回缓存结果</text>
+    <text x="460" y="90" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">Return Cache</text>
+  </g>
+  
+  <!-- Cache Miss Path -->
+  <g>
+    <rect x="400" y="150" width="120" height="60" rx="10" fill="url(#computeGrad)" filter="url(#shadow)"/>
+    <text x="460" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">执行计算</text>
+    <text x="460" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">Execute Compute</text>
+  </g>
+  
+  <!-- Store to Cache -->
+  <g>
+    <rect x="580" y="150" width="120" height="60" rx="10" fill="url(#cacheGrad)" filter="url(#shadow)"/>
+    <text x="640" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">存储到缓存</text>
+    <text x="640" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">Store to Cache</text>
+  </g>
+  
+  <!-- Return Result -->
+  <g>
+    <rect x="580" y="250" width="120" height="60" rx="10" fill="url(#clientGrad)" filter="url(#shadow)"/>
+    <text x="640" y="275" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">返回结果</text>
+    <text x="640" y="290" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">Return Result</text>
+  </g>
+  
+  <!-- Cache Layers -->
+  <g>
+    <rect x="50" y="350" width="700" height="200" rx="10" fill="white" stroke="#E2E8F0" stroke-width="2" filter="url(#shadow)"/>
+    <text x="400" y="375" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#1E293B">缓存层级 Cache Layers</text>
+    
+    <!-- Browser Cache -->
+    <rect x="80" y="400" width="140" height="50" rx="8" fill="url(#clientGrad)" filter="url(#shadow)"/>
+    <text x="150" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">浏览器缓存</text>
+    <text x="150" y="435" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">Browser Cache</text>
+    
+    <!-- CDN Cache -->
+    <rect x="240" y="400" width="140" height="50" rx="8" fill="url(#cacheGrad)" filter="url(#shadow)"/>
+    <text x="310" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">CDN缓存</text>
+    <text x="310" y="435" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">CDN Cache</text>
+    
+    <!-- Memory Cache -->
+    <rect x="400" y="400" width="140" height="50" rx="8" fill="#8B5CF6" filter="url(#shadow)"/>
+    <text x="470" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">内存缓存</text>
+    <text x="470" y="435" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">Memory Cache</text>
+    
+    <!-- File Cache -->
+    <rect x="560" y="400" width="140" height="50" rx="8" fill="url(#computeGrad)" filter="url(#shadow)"/>
+    <text x="630" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">文件缓存</text>
+    <text x="630" y="435" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">File Cache</text>
+    
+    <!-- Cache Layer Descriptions -->
+    <text x="80" y="480" font-family="Arial, sans-serif" font-size="10" fill="#475569">• 静态资源缓存</text>
+    <text x="80" y="495" font-family="Arial, sans-serif" font-size="10" fill="#475569">• 图像预览缓存</text>
+    <text x="80" y="510" font-family="Arial, sans-serif" font-size="10" fill="#475569">• 本地存储支持</text>
+    
+    <text x="240" y="480" font-family="Arial, sans-serif" font-size="10" fill="#475569">• 全球分发网络</text>
+    <text x="240" y="495" font-family="Arial, sans-serif" font-size="10" fill="#475569">• 静态文件加速</text>
+    <text x="240" y="510" font-family="Arial, sans-serif" font-size="10" fill="#475569">• 地理位置优化</text>
+    
+    <text x="400" y="480" font-family="Arial, sans-serif" font-size="10" fill="#475569">• 模型权重缓存</text>
+    <text x="400" y="495" font-family="Arial, sans-serif" font-size="10" fill="#475569">• 计算结果缓存</text>
+    <text x="400" y="510" font-family="Arial, sans-serif" font-size="10" fill="#475569">• 快速访问支持</text>
+    
+    <text x="560" y="480" font-family="Arial, sans-serif" font-size="10" fill="#475569">• 持久化存储</text>
+    <text x="560" y="495" font-family="Arial, sans-serif" font-size="10" fill="#475569">• 大文件缓存</text>
+    <text x="560" y="510" font-family="Arial, sans-serif" font-size="10" fill="#475569">• 跨会话保持</text>
+  </g>
+  
+  <!-- Flow Arrows -->
+  <line x1="170" y1="110" x2="180" y2="110" stroke="#64748B" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Cache Hit Arrow -->
+  <line x1="320" y1="95" x2="400" y2="80" stroke="#10B981" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="360" y="85" font-family="Arial, sans-serif" font-size="10" fill="#10B981">命中 Hit</text>
+  
+  <!-- Cache Miss Arrow -->
+  <line x1="320" y1="125" x2="400" y2="180" stroke="#F59E0B" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="360" y="155" font-family="Arial, sans-serif" font-size="10" fill="#F59E0B">未命中 Miss</text>
+  
+  <!-- Compute to Store Arrow -->
+  <line x1="520" y1="180" x2="580" y2="180" stroke="#64748B" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Store to Return Arrow -->
+  <line x1="640" y1="210" x2="640" y2="250" stroke="#64748B" stroke-width="2" marker-end="url(#arrowhead)"/>
+</svg>

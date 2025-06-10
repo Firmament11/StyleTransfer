@@ -4,6 +4,7 @@ import time
 import uuid
 import datetime
 import logging
+import json
 from threading import Thread, Lock
 
 import torch
@@ -506,15 +507,16 @@ def check_history():
         return jsonify({'message': 'You can add more styles.', 'history_images': history_images}), 200
 
 
-@app.route('/api/delete-history', methods=['DELETE'])
-def delete_history():
-    content_image = request.json.get('content_image')
+@app.route('/api/delete-history/<key>', methods=['DELETE'])
+def delete_history(key):
+    # 从路径参数获取key
+    content_image = key
     if not content_image:
         return jsonify({'error': '缺少内容图片参数'}), 400
 
     try:
         # 删除历史记录文件
-        history_path = os.path.join(HISTORY_FOLDER, HISTORY_FILE)
+        history_path = app.config['HISTORY_FILE']
         if os.path.exists(history_path):
             with open(history_path, 'r', encoding='utf-8') as f:
                 history = json.load(f)
@@ -522,10 +524,33 @@ def delete_history():
             if content_image in history:
                 # 删除相关的图片文件
                 for item in history[content_image]:
-                    output_path = item.get('output_img')
-                    if output_path and os.path.exists(output_path):
-                        os.remove(output_path)
-                        logging.info(f"删除输出图片: {output_path}")
+                    output_img_path = item.get('output_img')
+                    if output_img_path:
+                        # 处理路径，移除前缀的/history/
+                        if output_img_path.startswith('/history/'):
+                            filename = output_img_path[9:]  # 移除'/history/'
+                        else:
+                            filename = os.path.basename(output_img_path)
+                        
+                        full_path = os.path.join(app.config['HISTORY_FOLDER'], filename)
+                        if os.path.exists(full_path):
+                            os.remove(full_path)
+                            logging.info(f"删除输出图片: {full_path}")
+                        else:
+                            logging.warning(f"输出图片不存在: {full_path}")
+                
+                # 删除对应的内容图片（如果存在）
+                content_img_path = os.path.join(app.config['CONTENT_FOLDER'], f"{content_image}.jpg")
+                if os.path.exists(content_img_path):
+                    os.remove(content_img_path)
+                    logging.info(f"删除内容图片: {content_img_path}")
+                
+                # 检查其他可能的扩展名
+                for ext in ['png', 'jpeg', 'gif']:
+                    alt_content_path = os.path.join(app.config['CONTENT_FOLDER'], f"{content_image}.{ext}")
+                    if os.path.exists(alt_content_path):
+                        os.remove(alt_content_path)
+                        logging.info(f"删除内容图片: {alt_content_path}")
                 
                 # 从历史记录中删除
                 del history[content_image]
@@ -535,7 +560,7 @@ def delete_history():
                     json.dump(history, f, ensure_ascii=False, indent=2)
                 
                 logging.info(f"删除历史记录: {content_image}")
-                return jsonify({'message': '删除成功'})
+                return jsonify({'message': '删除成功', 'success': True})
             else:
                 return jsonify({'error': '未找到指定的历史记录'}), 404
         else:

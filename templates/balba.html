@@ -21,7 +21,7 @@
         transition: all 0.3s ease;
       }
       header {
-        background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+        background: linear-gradient(135deg, #0b56cf 0%, #6fa8ef 100%);
         position: relative;
         overflow: hidden;
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
@@ -183,8 +183,98 @@
         transition: max-height 0.3s ease;
       }
       .history-content.expanded {
-        max-height: 500px;
+        max-height: 400px; /* 设置固定最大高度 */
+        overflow-y: auto; /* 添加垂直滚动条 */
       }
+      
+      /* 自定义滚动条样式 */
+      .history-content::-webkit-scrollbar {
+        width: 8px;
+      }
+      .history-content::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+      }
+      .history-content::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+      }
+      .history-content::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+      
+      /* 夜间模式滚动条 */
+      .dark .history-content::-webkit-scrollbar-track {
+        background: #334155;
+      }
+      .dark .history-content::-webkit-scrollbar-thumb {
+        background: #64748b;
+      }
+      .dark .history-content::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+
+      /* 增强整体页面背景动画 - 蓝白直线旋转切换效果 */
+      body {
+        background: linear-gradient(45deg, #3b82f6 0%, #ffffff 25%, #60a5fa 50%, #ffffff 75%, #3b82f6 100%);
+        background-size: 200% 200%;
+        animation: gradientShift 8s ease-in-out infinite;
+        min-height: 100vh;
+        position: relative;
+      }
+      
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 20px,
+          rgba(59, 130, 246, 0.3) 20px,
+          rgba(59, 130, 246, 0.3) 40px,
+          rgba(255, 255, 255, 0.2) 40px,
+          rgba(255, 255, 255, 0.2) 60px
+        );
+        animation: rotateLines 12s linear infinite;
+        pointer-events: none;
+        z-index: -1;
+      }
+      
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+      
+      @keyframes rotateLines {
+        0% {
+          transform: rotate(0deg);
+        }
+        25% {
+          transform: rotate(90deg);
+        }
+        50% {
+          transform: rotate(180deg);
+        }
+        75% {
+          transform: rotate(270deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      
+
 
       /* 按钮样式 */
       .btn-primary {
@@ -200,7 +290,9 @@
       /* 结果图片区域 */
       .result-container {
         min-height: 200px;
-        aspect-ratio: 1 / 1; /* 使容器保持正方形 */
+        width: 400px; /* 设置固定宽度 */
+        height: 400px; /* 设置固定高度 */
+        margin: 0 auto; /* 居中显示 */
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -235,7 +327,7 @@
         border-color: #334155;
       }
       .dark .result-container.empty {
-        background: linear-gradient(145deg, #2a2a2b, #1e1e1e);
+        background: linear-gradient(145deg, #646467, #595757);
         border-color: #475569;
       }
       .result-container p {
@@ -280,9 +372,9 @@
       }
       .style-preview-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        grid-template-columns: repeat(5, 1fr); /* 固定显示5列 */
         gap: 10px;
-        max-height: 200px; /* 限制高度，只显示一行 */
+        max-height: 158px; /* 限制高度，只显示一行 */
         overflow: hidden; /* 隐藏溢出部分 */
         transition: max-height 0.5s ease;
       }
@@ -298,7 +390,7 @@
       }
       .style-preview-item img {
         width: 100%;
-        height: 80px;
+        aspect-ratio: 1 / 1; /* 使图片保持正方形 */
         object-fit: cover;
         border-radius: 8px;
         border: 1px solid #d1d5db;
@@ -432,9 +524,9 @@
       </div>
     </header>
     <div id="app" class="flex flex-col lg:flex-row max-w-6xl mx-auto p-6">
-      <div
-        class="left-panel flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 m-2 lg:w-1/3"
-      >
+        <div
+           class="left-panel bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 m-2 flex flex-col w-full lg:w-1/3"
+         >
         <h2 class="text-xl font-semibold mb-4">上传原图片</h2>
         <div class="image-preview mb-4">
           <h3 class="text-sm font-light mb-2">内容图片：</h3>
@@ -674,8 +766,8 @@
         </div>
       </div>
       <div
-        class="right-panel bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 m-2 flex flex-col w-full lg:w-2/3"
-      >
+          class="right-panel bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 m-2 flex flex-col w-full lg:w-2/3"
+        >
         <h2 class="text-xl font-semibold mb-4">处理状态</h2>
         <div v-if="loading" class="flex items-center justify-center py-6">
           <div
@@ -745,7 +837,7 @@
               <img
                 :src="style.url"
                 :alt="style.name"
-                class="h-40 w-full object-cover rounded-lg shadow-md transition-all duration-300 hover:shadow-xl"
+                class="w-full object-cover rounded-lg shadow-md transition-all duration-300 hover:shadow-xl"
               />
               <div
                 class="mt-2 text-center font-medium text-gray-700 dark:text-gray-300"
@@ -758,7 +850,8 @@
               @click="triggerCustomStyleUpload"
             >
               <div
-                class="h-40 w-full flex items-center justify-center rounded-lg shadow-md border-2 border-dashed border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/30 transition-all duration-300 hover:shadow-xl hover:border-blue-500 dark:hover:border-blue-500"
+                class="w-full flex items-center justify-center rounded-lg shadow-md border-2 border-dashed border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/30 transition-all duration-300 hover:shadow-xl hover:border-blue-500 dark:hover:border-blue-500 aspect-ratio-1"
+                style="aspect-ratio: 1/1;"
               >
                 <div class="text-center">
                   <i class="fas fa-plus text-4xl text-blue-500 mb-2"></i>
@@ -777,27 +870,57 @@
         </div>
       </div>
     </div>
-    <footer class="bg-gray-200 dark:bg-gray-800 text-center py-4 mt-6">
-      <h2 class="text-xl font-bold mb-4">学习资源</h2>
-      <ul
-        class="list-disc list-inside text-gray-700 dark:text-gray-400 mx-auto max-w-screen-sm mb-4"
-      >
-        <li>
-          <a
-            href="https://www.tensorflow.org/tutorials/generative/style_transfer"
-            class="text-blue-500 hover:underline"
-            >TensorFlow 风格迁移教程</a
-          >
-        </li>
-        <li>
-          <a
-            href="https://pytorch.org/tutorials/advanced/neural_style_tutorial.html"
-            class="text-blue-500 hover:underline"
-            >PyTorch 风格迁移教程</a
-          >
-        </li>
-      </ul>
-      <p>© 2025 Authored by Firmament.</p>
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <h3 class="text-lg font-semibold mb-4">学习资源</h3>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="https://arxiv.org/abs/1508.06576"
+                  class="text-blue-400 hover:text-blue-300"
+                  >原始论文: A Neural Algorithm of Artistic Style</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://pytorch.org/tutorials/advanced/neural_style_tutorial.html"
+                  class="text-blue-400 hover:text-blue-300"
+                  >PyTorch 官方教程</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://github.com/pytorch/examples/tree/master/fast_neural_style"
+                  class="text-blue-400 hover:text-blue-300"
+                  >GitHub 示例代码</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-4">技术栈</h3>
+            <ul class="space-y-2 text-gray-300">
+              <li>• PyTorch 深度学习框架</li>
+              <li>• VGG19 预训练模型</li>
+              <li>• Flask Web 框架</li>
+              <li>• Vue.js 前端框架</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-4">关于项目</h3>
+            <p class="text-gray-300 text-sm leading-relaxed">
+              这是一个基于神经网络的艺术风格迁移应用，使用深度学习技术将一张图片的艺术风格应用到另一张图片上，创造出独特的艺术作品。
+            </p>
+          </div>
+        </div>
+        <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+          <p class="text-gray-400">
+            &copy; 2024 神经风格迁移. 基于开源技术构建.
+          </p>
+        </div>
+      </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script>
@@ -1112,15 +1235,25 @@
               return;
             }
 
-            fetch(`/api/delete-history?key=${encodeURIComponent(key)}`, {
+            fetch(`/api/delete-history/${encodeURIComponent(key)}`, {
               method: "DELETE",
+              headers: {
+                'Accept': 'application/json',
+              },
             })
-              .then((response) => response.json())
+              .then((response) => {
+                if (!response.ok) {
+                  return response.text().then(text => {
+                    throw new Error(`HTTP ${response.status}: ${text}`);
+                  });
+                }
+                return response.json();
+              })
               .then((data) => {
                 if (
                   data.message === "Image deleted successfully." ||
-                  data.message ===
-                    "Image deleted, but history file does not exist."
+                  data.message === "Image deleted, but history file does not exist." ||
+                  data.success
                 ) {
                   alert("删除成功");
                   this.fetchHistory();
@@ -1128,7 +1261,10 @@
                   alert(data.message || "删除失败");
                 }
               })
-              .catch((error) => alert("删除失败: " + error));
+              .catch((error) => {
+                console.error('删除请求失败:', error);
+                alert("删除失败: " + error.message);
+              });
           },
           downloadStyledImage(imagePath) {
             const link = document.createElement("a");

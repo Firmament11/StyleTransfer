@@ -1,0 +1,102 @@
+<svg width="800" height="500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="inputGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="processGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#34d399;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="outputGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:1" />
+    </linearGradient>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#374151" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="400" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#1f2937">图像预处理流程图</text>
+  
+  <!-- Input Image -->
+  <rect x="50" y="60" width="120" height="80" rx="10" fill="url(#inputGrad)" stroke="#1e40af" stroke-width="2"/>
+  <text x="110" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">原始图像</text>
+  <text x="110" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">任意尺寸</text>
+  <text x="110" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">RGB格式</text>
+  
+  <!-- File Validation -->
+  <rect x="220" y="60" width="120" height="80" rx="10" fill="url(#processGrad)" stroke="#059669" stroke-width="2"/>
+  <text x="280" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">文件验证</text>
+  <text x="280" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">格式检查</text>
+  <text x="280" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">大小限制</text>
+  
+  <!-- Image Loading -->
+  <rect x="390" y="60" width="120" height="80" rx="10" fill="url(#processGrad)" stroke="#059669" stroke-width="2"/>
+  <text x="450" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">图像加载</text>
+  <text x="450" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">PIL.Image.open</text>
+  <text x="450" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">RGB转换</text>
+  
+  <!-- Size Adjustment -->
+  <rect x="560" y="60" width="120" height="80" rx="10" fill="url(#processGrad)" stroke="#059669" stroke-width="2"/>
+  <text x="620" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">尺寸调整</text>
+  <text x="620" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">保持比例</text>
+  <text x="620" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">最大512px</text>
+  
+  <!-- Tensor Conversion -->
+  <rect x="220" y="180" width="120" height="80" rx="10" fill="url(#processGrad)" stroke="#059669" stroke-width="2"/>
+  <text x="280" y="205" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">张量转换</text>
+  <text x="280" y="225" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">ToTensor()</text>
+  <text x="280" y="240" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">[0,1]范围</text>
+  
+  <!-- Normalization -->
+  <rect x="390" y="180" width="120" height="80" rx="10" fill="url(#processGrad)" stroke="#059669" stroke-width="2"/>
+  <text x="450" y="205" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">标准化</text>
+  <text x="450" y="225" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">ImageNet均值</text>
+  <text x="450" y="240" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">标准差归一化</text>
+  
+  <!-- Batch Dimension -->
+  <rect x="560" y="180" width="120" height="80" rx="10" fill="url(#processGrad)" stroke="#059669" stroke-width="2"/>
+  <text x="620" y="205" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">批次维度</text>
+  <text x="620" y="225" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">unsqueeze(0)</text>
+  <text x="620" y="240" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">[1,C,H,W]</text>
+  
+  <!-- Device Transfer -->
+  <rect x="390" y="300" width="120" height="80" rx="10" fill="url(#processGrad)" stroke="#059669" stroke-width="2"/>
+  <text x="450" y="325" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">设备传输</text>
+  <text x="450" y="345" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">GPU/CPU</text>
+  <text x="450" y="360" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">CUDA加速</text>
+  
+  <!-- Final Tensor -->
+  <rect x="560" y="300" width="120" height="80" rx="10" fill="url(#outputGrad)" stroke="#d97706" stroke-width="2"/>
+  <text x="620" y="325" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">预处理完成</text>
+  <text x="620" y="345" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">模型输入张量</text>
+  <text x="620" y="360" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">准备训练</text>
+  
+  <!-- Arrows -->
+  <line x1="170" y1="100" x2="220" y2="100" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="340" y1="100" x2="390" y2="100" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="510" y1="100" x2="560" y2="100" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="620" y1="140" x2="280" y2="180" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="340" y1="220" x2="390" y2="220" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="510" y1="220" x2="560" y2="220" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="620" y1="260" x2="450" y2="300" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="510" y1="340" x2="560" y2="340" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Code snippets -->
+  <rect x="50" y="400" width="700" height="80" rx="5" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="60" y="420" font-family="Courier New, monospace" font-size="10" fill="#1e293b">def image_loader(image_name, imsize):</text>
+  <text x="60" y="435" font-family="Courier New, monospace" font-size="10" fill="#1e293b">    image = Image.open(image_name)</text>
+  <text x="60" y="450" font-family="Courier New, monospace" font-size="10" fill="#1e293b">    loader = transforms.Compose([transforms.Resize(imsize), transforms.ToTensor()])</text>
+  <text x="60" y="465" font-family="Courier New, monospace" font-size="10" fill="#1e293b">    return loader(image).unsqueeze(0).to(device, torch.float)</text>
+  
+  <!-- Parameters info -->
+  <rect x="50" y="160" width="150" height="100" rx="5" fill="#fef7cd" stroke="#f59e0b" stroke-width="1"/>
+  <text x="125" y="180" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#92400e">关键参数</text>
+  <text x="60" y="200" font-family="Arial, sans-serif" font-size="9" fill="#92400e">• 最大尺寸: 512px</text>
+  <text x="60" y="215" font-family="Arial, sans-serif" font-size="9" fill="#92400e">• 数据类型: float32</text>
+  <text x="60" y="230" font-family="Arial, sans-serif" font-size="9" fill="#92400e">• 设备: CUDA/CPU</text>
+  <text x="60" y="245" font-family="Arial, sans-serif" font-size="9" fill="#92400e">• 批次大小: 1</text>
+  
+</svg>
